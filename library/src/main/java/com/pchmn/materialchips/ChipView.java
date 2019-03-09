@@ -7,21 +7,19 @@ import android.content.res.TypedArray;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.support.annotation.ColorInt;
-import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.pchmn.materialchips.model.Chip;
 import com.pchmn.materialchips.model.ChipInterface;
 import com.pchmn.materialchips.util.LetterTileProvider;
 import com.pchmn.materialchips.util.ViewUtil;
 
+import androidx.annotation.ColorInt;
+import androidx.core.content.ContextCompat;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;

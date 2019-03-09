@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Rect;
 import android.os.Build;
-import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.view.ActionMode;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -17,10 +15,12 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 
 import com.pchmn.materialchips.views.ChipsInputEditText;
 import com.pchmn.materialchips.views.DetailedChipView;
+
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 public class MyWindowCallback implements Window.Callback {
 

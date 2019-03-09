@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -14,11 +13,11 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
 import android.text.TextPaint;
-import android.util.Log;
 
 import com.pchmn.materialchips.R;
+
+import androidx.core.content.ContextCompat;
 
 /**
  * Used to create a {@link Bitmap} that contains a letter used in the English

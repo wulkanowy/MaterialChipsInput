@@ -1,10 +1,11 @@
 package com.pchmn.sample.materialchipsinput;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.appcompat.app.AppCompatDialogFragment;
 
 public class MyDialogFragment extends AppCompatDialogFragment {
 

@@ -2,17 +2,14 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.jakewharton.butterknife'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 28
+    buildToolsVersion '28.0.3'
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 25
+        targetSdkVersion 28
         versionCode 9
         versionName "1.0.8"
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
     }
     buildTypes {
         release {
@@ -20,27 +17,22 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    compile 'com.android.support:appcompat-v7:25.3.0'
-    testCompile 'junit:junit:4.12'
+    implementation "androidx.legacy:legacy-support-v4:1.0.0"
+    implementation "androidx.appcompat:appcompat:1.0.2"
+    implementation "androidx.recyclerview:recyclerview:1.0.0"
+    implementation "com.google.android.material:material:1.0.0"
 
-    // recycler
-    compile 'com.android.support:recyclerview-v7:25.3.0'
-    compile 'com.beloo.widget:ChipsLayoutManager:0.3.7@aar'
+    implementation 'com.beloo.widget:ChipsLayoutManager:0.3.7@aar'
+    implementation 'de.hdodenhof:circleimageview:3.0.0'
 
-    // circle image view
-    compile 'de.hdodenhof:circleimageview:2.1.0'
-
-    // butter knife
-    compile 'com.jakewharton:butterknife:8.5.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+    implementation 'com.jakewharton:butterknife:10.1.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
 }
-
-apply plugin: 'com.github.dcendents.android-maven'
-group='com.github.pchmn'

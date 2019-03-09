@@ -7,8 +7,6 @@ import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.os.Build;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -25,6 +23,8 @@ import com.pchmn.materialchips.util.ViewUtil;
 
 import java.util.List;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
