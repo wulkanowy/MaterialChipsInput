@@ -7,6 +7,7 @@ import android.content.res.TypedArray;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageButton;
@@ -349,6 +350,10 @@ public class ChipView extends RelativeLayout {
      */
     public void setOnChipClicked(OnClickListener onClickListener) {
         mContentLayout.setOnClickListener(onClickListener);
+        mContentLayout.setClickable(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            mContentLayout.setBackground(ContextCompat.getDrawable(getContext(), R.drawable.ripple_chip_view));
+        }
     }
 
     /**

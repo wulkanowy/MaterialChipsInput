@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -12,7 +12,6 @@
         android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="32dp"
-        android:clickable="true"
         android:background="@drawable/ripple_chip_view">
 
         <!-- avatar -->
@@ -30,8 +29,12 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:paddingLeft="8dp"
+            android:ellipsize="end"
             android:textSize="14sp"
-            android:text="Paulcito"/>
+            android:maxLines="1"
+            android:paddingStart="8dp"
+            tools:ignore="RtlSymmetry"
+            tools:text="Paulcito" />
 
         <!-- remove button -->
         <ImageButton
@@ -42,7 +45,8 @@
             android:src="@drawable/ic_cancel_grey_24dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:layout_marginLeft="4dp"
-            android:layout_marginRight="4dp" />
+            android:layout_marginRight="4dp"
+            tools:ignore="ContentDescription" />
 
     </LinearLayout>
 
