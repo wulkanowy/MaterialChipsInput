@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:hint="Enter a name"
-        app:maxRows="3" />
+        app:horizontalScroll="true" />
 
     <Button
         android:id="@+id/validate"
