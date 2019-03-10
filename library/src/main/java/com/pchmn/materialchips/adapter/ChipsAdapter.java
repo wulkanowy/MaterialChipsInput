@@ -1,12 +1,14 @@
 package com.pchmn.materialchips.adapter;
 
 import android.content.Context;
+import android.os.Build;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -164,12 +166,35 @@ public class ChipsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     private void autofitEditText() {
-        // min width of edit text = 50 dp
         ViewGroup.LayoutParams params = mEditText.getLayoutParams();
         params.width = ViewGroup.LayoutParams.WRAP_CONTENT;
         mEditText.setLayoutParams(params);
         mEditText.setMinWidth(ViewUtil.dpToPx(50));
-        mEditText.requestFocus();
+
+        mEditText.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            @Override
+            public void onGlobalLayout() {
+                int right = mRecycler.getRight();
+                int left = mEditText.getLeft();
+                ViewGroup.LayoutParams params = mEditText.getLayoutParams();
+
+                if (left < (right - ViewUtil.dpToPx(100))) {
+                    params.width = right - left;
+                } else {
+                    params.width = ViewGroup.LayoutParams.WRAP_CONTENT;
+                }
+                mEditText.setLayoutParams(params);
+                mEditText.requestFocus();
+
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+                    mEditText.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                } else {
+                    mEditText.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                }
+            }
+
+        });
     }
 
     private void handleClickOnEditText(ChipView chipView, final int position) {

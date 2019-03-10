@@ -9,10 +9,10 @@
     <!-- content -->
     <LinearLayout
         android:id="@+id/content"
-        android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="32dp"
-        android:background="@drawable/ripple_chip_view">
+        android:background="@drawable/ripple_chip_view"
+        android:orientation="horizontal">
 
         <!-- avatar -->
         <de.hdodenhof.circleimageview.CircleImageView
@@ -20,7 +20,7 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:src="@drawable/avatar"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <!-- label -->
         <TextView
@@ -28,11 +28,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:paddingLeft="8dp"
             android:ellipsize="end"
-            android:textSize="14sp"
             android:maxLines="1"
             android:paddingStart="8dp"
+            android:paddingLeft="8dp"
+            android:textSize="14sp"
             tools:ignore="RtlSymmetry"
             tools:text="Paulcito" />
 
@@ -42,10 +42,10 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_cancel_grey_24dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
             android:layout_marginLeft="4dp"
             android:layout_marginRight="4dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_cancel_grey_24dp"
             tools:ignore="ContentDescription" />
 
     </LinearLayout>
