@@ -22,7 +22,6 @@ public class ChipExamplesActivity extends AppCompatActivity {
     @BindView(R.id.chip4) ChipView mChip4;
     @BindView(R.id.chip5) ChipView mChip5;
     @BindView(R.id.chip6) ChipView mChip6;
-    @BindView(R.id.chip7) ChipView mChip7;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,21 +63,16 @@ public class ChipExamplesActivity extends AppCompatActivity {
         mChip5.setOnChipClicked(view -> {
             Toast.makeText(ChipExamplesActivity.this, mChip5.getLabel() + ": clicked", Toast.LENGTH_SHORT).show();
         });
+        mChip5.setOnDeleteClicked(view -> {
+            Toast.makeText(ChipExamplesActivity.this, mChip5.getLabel() + ": delete clicked", Toast.LENGTH_SHORT).show();
+        });
 
-        // chip 6
+        // chip 7
         mChip6.setOnChipClicked(view -> {
             Toast.makeText(ChipExamplesActivity.this, mChip6.getLabel() + ": clicked", Toast.LENGTH_SHORT).show();
         });
         mChip6.setOnDeleteClicked(view -> {
             Toast.makeText(ChipExamplesActivity.this, mChip6.getLabel() + ": delete clicked", Toast.LENGTH_SHORT).show();
-        });
-
-        // chip 7
-        mChip7.setOnChipClicked(view -> {
-            Toast.makeText(ChipExamplesActivity.this, mChip7.getLabel() + ": clicked", Toast.LENGTH_SHORT).show();
-        });
-        mChip7.setOnDeleteClicked(view -> {
-            Toast.makeText(ChipExamplesActivity.this, mChip7.getLabel() + ": delete clicked", Toast.LENGTH_SHORT).show();
         });
 
 
