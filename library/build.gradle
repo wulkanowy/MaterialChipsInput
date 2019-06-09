@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.jakewharton.butterknife'
 
 android {
@@ -8,14 +10,8 @@ android {
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 28
-        versionCode 9
-        versionName "1.0.8"
-    }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
+        versionCode 10
+        versionName "2.0.0"
     }
 
     compileOptions {
@@ -25,13 +21,14 @@ android {
 }
 
 dependencies {
-    implementation "androidx.legacy:legacy-support-v4:1.0.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation "androidx.appcompat:appcompat:1.0.2"
-    implementation "androidx.recyclerview:recyclerview:1.0.0"
-    implementation "com.google.android.material:material:1.0.0"
+    implementation "androidx.core:core-ktx:1.0.2"
 
-    implementation 'com.beloo.widget:ChipsLayoutManager:0.3.7@aar'
+    implementation "androidx.recyclerview:recyclerview:1.0.0"
+    implementation "com.google.android.material:material:1.1.0-alpha07"
     implementation 'de.hdodenhof:circleimageview:3.0.0'
+    implementation 'com.beloo.widget:ChipsLayoutManager:0.3.7@aar'
 
     implementation 'com.jakewharton:butterknife:10.1.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'

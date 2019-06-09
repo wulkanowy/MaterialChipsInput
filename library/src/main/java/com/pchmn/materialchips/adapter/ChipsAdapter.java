@@ -13,19 +13,18 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.pchmn.materialchips.ChipView;
 import com.pchmn.materialchips.ChipsInput;
 import com.pchmn.materialchips.model.ChipInterface;
 import com.pchmn.materialchips.util.ViewUtil;
 import com.pchmn.materialchips.views.ChipsInputEditText;
-import com.pchmn.materialchips.views.DetailedChipView;
 import com.pchmn.materialchips.views.FilterableListView;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import androidx.recyclerview.widget.RecyclerView;
 
 
 public class ChipsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -205,66 +204,6 @@ public class ChipsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 removeChip(position);
             }
         });
-
-        // show detailed chip
-        if (mChipsInput.isShowChipDetailed()) {
-            chipView.setOnChipClicked(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // get chip position
-                    int[] coord = new int[2];
-                    v.getLocationInWindow(coord);
-
-                    final DetailedChipView detailedChipView = mChipsInput.getDetailedChipView(getItem(position));
-                    setDetailedChipViewPosition(detailedChipView, coord);
-
-                    // delete button
-                    detailedChipView.setOnDeleteClicked(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            removeChip(position);
-                            detailedChipView.fadeOut();
-                        }
-                    });
-                }
-            });
-        }
-    }
-
-    private void setDetailedChipViewPosition(DetailedChipView detailedChipView, int[] coord) {
-        // window width
-        ViewGroup rootView = (ViewGroup) mRecycler.getRootView();
-        int windowWidth = ViewUtil.getWindowWidth(mContext);
-
-        // chip size
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
-                ViewUtil.dpToPx(300),
-                ViewUtil.dpToPx(100));
-
-        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-
-        // align left window
-        if (coord[0] <= 0) {
-            layoutParams.leftMargin = 0;
-            layoutParams.topMargin = coord[1] - ViewUtil.dpToPx(13);
-            detailedChipView.alignLeft();
-        }
-        // align right
-        else if (coord[0] + ViewUtil.dpToPx(300) > windowWidth + ViewUtil.dpToPx(13)) {
-            layoutParams.leftMargin = windowWidth - ViewUtil.dpToPx(300);
-            layoutParams.topMargin = coord[1] - ViewUtil.dpToPx(13);
-            detailedChipView.alignRight();
-        }
-        // same position as chip
-        else {
-            layoutParams.leftMargin = coord[0] - ViewUtil.dpToPx(13);
-            layoutParams.topMargin = coord[1] - ViewUtil.dpToPx(13);
-        }
-
-        // show view
-        rootView.addView(detailedChipView, layoutParams);
-        detailedChipView.fadeIn();
     }
 
     public void setFilterableListView(FilterableListView filterableListView) {

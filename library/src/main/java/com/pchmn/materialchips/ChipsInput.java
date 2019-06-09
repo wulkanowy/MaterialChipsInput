@@ -11,6 +11,9 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager;
 import com.pchmn.materialchips.adapter.ChipsAdapter;
 import com.pchmn.materialchips.model.Chip;
@@ -20,14 +23,11 @@ import com.pchmn.materialchips.util.MyWindowCallback;
 import com.pchmn.materialchips.util.SmoothScrollLinearLayoutManager;
 import com.pchmn.materialchips.util.ViewUtil;
 import com.pchmn.materialchips.views.ChipsInputEditText;
-import com.pchmn.materialchips.views.DetailedChipView;
 import com.pchmn.materialchips.views.FilterableListView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -228,15 +228,6 @@ public class ChipsInput extends FrameLayout {
             editText.setTextColor(mTextColor);
 
         return editText;
-    }
-
-    public DetailedChipView getDetailedChipView(ChipInterface chip) {
-        return new DetailedChipView.Builder(mContext)
-                .chip(chip)
-                .textColor(mChipDetailedTextColor)
-                .backgroundColor(mChipDetailedBackgroundColor)
-                .deleteIconColor(mChipDetailedDeleteIconColor)
-                .build();
     }
 
     public void addChipsListener(ChipsListener chipsListener) {
