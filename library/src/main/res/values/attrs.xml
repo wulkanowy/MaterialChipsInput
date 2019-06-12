@@ -12,7 +12,7 @@
         <attr name="backgroundColor" format="color" />
     </declare-styleable>
 
-    <declare-styleable name="ChipsInput">
+    <declare-styleable name="MaterialChipsInput">
         <attr name="hint" format="string" />
         <attr name="hintColor" format="color" />
         <attr name="textColor" format="color" />

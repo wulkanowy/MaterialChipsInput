@@ -7,6 +7,7 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -27,10 +28,6 @@ public class MainActivity extends AppCompatActivity {
 
         mContactListButton.setOnClickListener(view -> {
             startActivity(new Intent(MainActivity.this, ContactListActivity.class));
-        });
-
-        mCustomChipsButton.setOnClickListener(view -> {
-            startActivity(new Intent(MainActivity.this, ChipExamplesActivity.class));
         });
     }
 

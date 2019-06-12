@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -8,12 +7,10 @@
     android:padding="16dp"
     tools:context="com.pchmn.sample.materialchipsinput.ContactListActivity">
 
-    <com.pchmn.materialchips.ChipsInput
+    <com.pchmn.materialchips.MaterialChipsInput
         android:id="@+id/chips_input"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:hint="Enter a name"
-        app:horizontalScroll="true" />
+        android:layout_height="wrap_content" />
 
     <Button
         android:id="@+id/validate"

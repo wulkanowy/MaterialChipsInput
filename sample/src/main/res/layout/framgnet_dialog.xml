@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
-    <com.pchmn.materialchips.ChipsInput
+    <com.pchmn.materialchips.MaterialChipsInput
         android:id="@+id/chips_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

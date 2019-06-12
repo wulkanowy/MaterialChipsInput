@@ -1,51 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:clickable="true"
-    android:background="@android:color/white"
-    android:foreground="?attr/selectableItemBackground">
+    android:background="?attr/selectableItemBackground"
+    android:orientation="horizontal">
 
-    <!-- avatar -->
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/avatar"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center_vertical"
+        android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:src="@drawable/avatar" />
+        tools:src="@tools:sample/avatars" />
 
-    <!-- info -->
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_gravity="center_vertical"
-        android:gravity="center_vertical"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginStart="18dp"
         android:layout_marginLeft="18dp"
-        android:layout_marginRight="16dp">
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="15dp"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
 
-        <!-- name -->
         <TextView
             android:id="@+id/label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
+            android:maxLines="1"
+            android:text="test"
             android:textColor="@android:color/black"
-            android:text="Two line item"/>
+            android:textSize="14sp"
+            tools:text="@tools:sample/lorem/random" />
 
         <TextView
             android:id="@+id/info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:maxLines="1"
             android:paddingTop="2dp"
+            android:text="test"
             android:textSize="13sp"
-            android:text="secondary text"/>
-
-
+            tools:text="@tools:sample/lorem/random" />
     </LinearLayout>
-
 </LinearLayout>

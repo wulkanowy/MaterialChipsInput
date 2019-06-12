@@ -6,29 +6,32 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.pchmn.materialchips.ChipsInput;
-import com.pchmn.materialchips.model.ChipInterface;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.chip.Chip;
+import com.pchmn.materialchips.MaterialChipsInput;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.appcompat.app.AppCompatActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ContactListActivity extends AppCompatActivity {
 
     private static final String TAG = ContactListActivity.class.toString();
-    @BindView(R.id.chips_input) ChipsInput mChipsInput;
-    @BindView(R.id.validate) Button mValidateButton;
-    @BindView(R.id.chip_list) TextView mChipListText;
-    private List<ContactChip> mContactList;
+    @BindView(R.id.chips_input)
+    MaterialChipsInput mMaterialChipsInput;
+    @BindView(R.id.validate)
+    Button mValidateButton;
+    @BindView(R.id.chip_list)
+    TextView mChipListText;
+    private List<Chip> mContactList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,45 +45,13 @@ public class ContactListActivity extends AppCompatActivity {
         new RxPermissions(this)
                 .request(Manifest.permission.READ_CONTACTS)
                 .subscribe(granted -> {
-                    if(granted && mContactList.size() == 0)
+                    if (granted && mContactList.size() == 0)
                         getContactList();
 
                 }, err -> {
                     Log.e(TAG, err.getMessage());
                     Toast.makeText(ContactListActivity.this, "Error get contacts, see logs", Toast.LENGTH_LONG).show();
                 });
-
-        // chips listener
-        mChipsInput.addChipsListener(new ChipsInput.ChipsListener() {
-            @Override
-            public void onChipAdded(ChipInterface chip, int newSize) {
-                Log.e(TAG, "chip added, " + newSize);
-            }
-
-            @Override
-            public void onChipRemoved(ChipInterface chip, int newSize) {
-                Log.e(TAG, "chip removed, " + newSize);
-            }
-
-            @Override
-            public void onTextChanged(CharSequence text) {
-                Log.e(TAG, "text changed: " + text.toString());
-            }
-        });
-
-        // show selected chips
-        mValidateButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                String listString = "";
-                for(ContactChip chip: (List<ContactChip>)  mChipsInput.getSelectedChipList()) {
-                    listString += chip.getLabel() + " (" + (chip.getInfo() != null ? chip.getInfo(): "") + ")" + ", ";
-                }
-
-                mChipListText.setText(listString);
-            }
-        });
     }
 
     /**
@@ -88,10 +59,10 @@ public class ContactListActivity extends AppCompatActivity {
      * And finally pass the mContactList to the mChipsInput
      */
     private void getContactList() {
-        Cursor phones = this.getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null,null,null, null);
+        Cursor phones = this.getContentResolver().query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
 
         // loop over all contacts
-        if(phones != null) {
+        if (phones != null) {
             while (phones.moveToNext()) {
                 // get contact info
                 String phoneNumber = null;
@@ -99,14 +70,14 @@ public class ContactListActivity extends AppCompatActivity {
                 String name = phones.getString(phones.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
                 String avatarUriString = phones.getString(phones.getColumnIndex(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI));
                 Uri avatarUri = null;
-                if(avatarUriString != null)
+                if (avatarUriString != null)
                     avatarUri = Uri.parse(avatarUriString);
 
                 // get phone number
                 if (Integer.parseInt(phones.getString(phones.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
                     Cursor pCur = this.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
                             null,
-                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[] { id }, null);
+                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{id}, null);
 
                     while (pCur != null && pCur.moveToNext()) {
                         phoneNumber = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
@@ -115,15 +86,14 @@ public class ContactListActivity extends AppCompatActivity {
                     pCur.close();
 
                 }
+                Chip chip = new Chip(this);
+                chip.setText(name);
 
-                ContactChip contactChip = new ContactChip(id, avatarUri, name, phoneNumber);
-                // add contact to the list
-                mContactList.add(contactChip);
+                mContactList.add(chip);
             }
             phones.close();
         }
 
-        // pass contact list to chips input
-        mChipsInput.setFilterableList(mContactList);
+        mMaterialChipsInput.setItemList(mContactList);
     }
 }
