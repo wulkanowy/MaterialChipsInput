@@ -7,6 +7,8 @@ import android.graphics.Rect
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.JELLY_BEAN
 import android.util.AttributeSet
+import android.view.KeyEvent
+import android.view.KeyEvent.KEYCODE_BACK
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
@@ -75,6 +77,13 @@ internal class DropdownListView @JvmOverloads constructor(context: Context, attr
             if (it > 0) fadeIn()
             else fadeOut()
         }
+    }
+
+    fun processKeyEvent(event: KeyEvent): Boolean {
+        return if (event.keyCode == KEYCODE_BACK && visibility == VISIBLE) {
+            fadeOut()
+            true
+        } else false
     }
 
     private fun fadeIn() {

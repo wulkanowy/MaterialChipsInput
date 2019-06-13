@@ -2,6 +2,7 @@ package io.github.wulkanowy.materialchipsinput
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.KeyEvent
 import android.view.View
 import android.widget.FrameLayout
 import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager
@@ -40,19 +41,24 @@ class MaterialChipInput @JvmOverloads constructor(context: Context, attrs: Attri
         }
     }
 
-    internal fun onItemSelectedInternal(chip: Chip) {
+    internal fun onItemSelected(chip: Chip) {
         materialChipInputAdapter.addChip(chip)
     }
 
-    internal fun onChipAddedInternal(chip: Chip) {
+    internal fun onChipAdded(chip: Chip) {
         dropdownListView.dropdownListViewAdapter.removeItem(chip)
     }
 
-    internal fun onChipRemovedInternal(chip: Chip) {
+    internal fun onChipRemoved(chip: Chip) {
         dropdownListView.dropdownListViewAdapter.addItem(chip)
     }
 
-    internal fun onTextChangedInternal(text: CharSequence?) {
+    internal fun onTextChanged(text: CharSequence?) {
         dropdownListView.processText(text)
+    }
+
+    override fun dispatchKeyEventPreIme(event: KeyEvent): Boolean {
+        val isConsumed = dropdownListView.processKeyEvent(event)
+        return if (isConsumed) true else super.dispatchKeyEventPreIme(event)
     }
 }

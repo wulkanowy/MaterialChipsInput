@@ -61,7 +61,7 @@ internal class MaterialChipInputAdapter(
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    chipInput.onTextChangedInternal(s)
+                    chipInput.onTextChanged(s)
                 }
             })
 
@@ -116,7 +116,7 @@ internal class MaterialChipInputAdapter(
         }
         notifyItemInserted(chipList.size)
         recycler.smoothScrollToPosition(itemCount)
-        chipInput.onChipAddedInternal(chip)
+        chipInput.onChipAdded(chip)
     }
 
     private fun removeChip(position: Int) {
@@ -127,7 +127,7 @@ internal class MaterialChipInputAdapter(
             chipEditText.hint = chipEditTextHint
         }
         notifyDataSetChanged()
-        chipInput.onChipRemovedInternal(chip)
+        chipInput.onChipRemoved(chip)
     }
 
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view)
