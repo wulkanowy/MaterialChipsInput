@@ -18,7 +18,7 @@ import android.widget.RelativeLayout
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
-import io.github.wulkanowy.materialchipsinput.util.ViewUtil
+import io.github.wulkanowy.materialchipsinput.util.convertDpToPixels
 
 
 class MaterialChipsInputAdapter(
@@ -82,11 +82,13 @@ class MaterialChipsInputAdapter(
         if (getItemViewType(position) == TYPE_EDIT_TEXT) {
             with(holder.itemView as AppCompatEditText) {
                 if (chipList.isEmpty()) hint = chipEditTextHint
-                layoutParams = layoutParams.apply { width = ViewUtil.dpToPx(50) }
+                layoutParams = layoutParams.apply { width = context.convertDpToPixels(50f).toInt() }
 
                 viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
                     override fun onGlobalLayout() {
-                        layoutParams = layoutParams.apply { width = recycler.right - left - ViewUtil.dpToPx(8) }
+                        layoutParams = layoutParams.apply {
+                            width = recycler.right - left - context.convertDpToPixels(8f).toInt()
+                        }
                         requestFocus()
 
                         if (SDK_INT < JELLY_BEAN) {

@@ -15,7 +15,7 @@ import android.view.animation.AlphaAnimation
 import android.widget.RelativeLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
-import io.github.wulkanowy.materialchipsinput.util.ViewUtil
+import io.github.wulkanowy.materialchipsinput.util.navBarHeight
 import kotlinx.android.synthetic.main.list_dropdown.view.*
 
 internal class DropdownListView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0)
@@ -42,13 +42,13 @@ internal class DropdownListView @JvmOverloads constructor(context: Context, attr
         chipsInput.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
 
             override fun onGlobalLayout() {
-                val layoutParams = LayoutParams(ViewUtil.getWindowWidth(context), MATCH_PARENT)
+                val layoutParams = LayoutParams(context.resources.displayMetrics.widthPixels, MATCH_PARENT)
                         .apply {
                             addRule(ALIGN_PARENT_TOP)
                             addRule(ALIGN_PARENT_LEFT)
 
                             if (context.resources.configuration.orientation == ORIENTATION_PORTRAIT) {
-                                bottomMargin = ViewUtil.getNavBarHeight(context)
+                                bottomMargin = context.navBarHeight
                             }
                         }
 
