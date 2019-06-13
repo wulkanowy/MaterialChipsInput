@@ -1,4 +1,4 @@
-package io.github.wulkanowy.materialchipsinput.views
+package io.github.wulkanowy.materialchipsinput
 
 
 import android.content.Context
@@ -15,16 +15,13 @@ import android.view.animation.AlphaAnimation
 import android.widget.RelativeLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
-import io.github.wulkanowy.materialchipsinput.MaterialChipsInput
-import io.github.wulkanowy.materialchipsinput.R
-import io.github.wulkanowy.materialchipsinput.adapter.FilterableAdapter
 import io.github.wulkanowy.materialchipsinput.util.ViewUtil
 import kotlinx.android.synthetic.main.list_dropdown.view.*
 
-internal class FilterableListView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0)
+internal class DropdownListView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0)
     : RelativeLayout(context, attrs, defStyle) {
 
-    lateinit var filterableAdapter: FilterableAdapter
+    lateinit var dropdownListViewAdapter: DropdownListViewAdapter
 
     private lateinit var chipsInput: MaterialChipsInput
 
@@ -36,10 +33,10 @@ internal class FilterableListView @JvmOverloads constructor(context: Context, at
     fun initialize(chipList: List<Chip>, chipsInput: MaterialChipsInput) {
         this.chipsInput = chipsInput
 
-        filterableAdapter = FilterableAdapter(context, chipList, chipsInput)
+        dropdownListViewAdapter = DropdownListViewAdapter(context, chipList, chipsInput)
         with(listDropdownRecycler) {
             layoutManager = LinearLayoutManager(context)
-            adapter = filterableAdapter
+            adapter = dropdownListViewAdapter
         }
 
         chipsInput.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
@@ -55,7 +52,7 @@ internal class FilterableListView @JvmOverloads constructor(context: Context, at
                             }
                         }
 
-                (chipsInput.rootView as ViewGroup).addView(this@FilterableListView, layoutParams)
+                (chipsInput.rootView as ViewGroup).addView(this@DropdownListView, layoutParams)
 
                 if (SDK_INT < JELLY_BEAN) {
                     @Suppress("DEPRECATION")
@@ -74,7 +71,7 @@ internal class FilterableListView @JvmOverloads constructor(context: Context, at
             return
         }
 
-        filterableAdapter.processText(text) {
+        dropdownListViewAdapter.processText(text) {
             if (it > 0) fadeIn()
             else fadeOut()
         }

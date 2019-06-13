@@ -1,4 +1,4 @@
-package io.github.wulkanowy.materialchipsinput.adapter
+package io.github.wulkanowy.materialchipsinput
 
 import android.content.Context
 import android.os.Build.VERSION.SDK_INT
@@ -18,15 +18,14 @@ import android.widget.RelativeLayout
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
-import io.github.wulkanowy.materialchipsinput.MaterialChipsInput
 import io.github.wulkanowy.materialchipsinput.util.ViewUtil
 
 
-class ChipsAdapter(
+class MaterialChipsInputAdapter(
         private val context: Context,
         private val chipsInput: MaterialChipsInput,
         private val recycler: RecyclerView)
-    : RecyclerView.Adapter<ChipsAdapter.ItemViewHolder>() {
+    : RecyclerView.Adapter<MaterialChipsInputAdapter.ItemViewHolder>() {
 
     val chipList = mutableListOf<Chip>()
 

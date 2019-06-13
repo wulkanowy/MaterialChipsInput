@@ -1,4 +1,4 @@
-package io.github.wulkanowy.materialchipsinput.adapter
+package io.github.wulkanowy.materialchipsinput
 
 
 import android.content.Context
@@ -8,15 +8,13 @@ import android.view.ViewGroup
 import android.widget.Filter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
-import io.github.wulkanowy.materialchipsinput.MaterialChipsInput
-import io.github.wulkanowy.materialchipsinput.R
 import kotlinx.android.extensions.LayoutContainer
 
-internal class FilterableAdapter(
+internal class DropdownListViewAdapter(
         private val context: Context,
         originalChipList: List<Chip>,
         private val chipsInput: MaterialChipsInput)
-    : RecyclerView.Adapter<FilterableAdapter.ItemViewHolder>() {
+    : RecyclerView.Adapter<DropdownListViewAdapter.ItemViewHolder>() {
 
     private val currentChipList = originalChipList.toMutableList()
 
@@ -70,7 +68,7 @@ internal class FilterableAdapter(
         override val containerView get() = itemView
     }
 
-    class ChipFilter(private val adapter: FilterableAdapter) : Filter() {
+    class ChipFilter(private val adapter: DropdownListViewAdapter) : Filter() {
 
         override fun performFiltering(constraint: CharSequence): FilterResults {
             val originalList = adapter.currentChipList

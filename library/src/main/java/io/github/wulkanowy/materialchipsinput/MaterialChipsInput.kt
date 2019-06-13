@@ -7,35 +7,33 @@ import android.widget.FrameLayout
 import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager
 import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager.HORIZONTAL
 import com.google.android.material.chip.Chip
-import io.github.wulkanowy.materialchipsinput.adapter.ChipsAdapter
-import io.github.wulkanowy.materialchipsinput.views.FilterableListView
 import kotlinx.android.synthetic.main.input_chips.view.*
 
 class MaterialChipsInput @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0)
     : FrameLayout(context, attrs, defStyle) {
 
-    private var chipsAdapter: ChipsAdapter
+    private var materialChipsInputAdapter: MaterialChipsInputAdapter
 
-    private var filterableListView: FilterableListView
+    private var dropdownListView: DropdownListView
 
     var itemList: List<Chip>? = null
         set(list) {
             field = list
             list?.let {
-                filterableListView.initialize(it, this)
+                dropdownListView.initialize(it, this)
             }
         }
 
-    val selectedChipList get() = chipsAdapter.chipList
+    val selectedChipList get() = materialChipsInputAdapter.chipList
 
     init {
         View.inflate(context, R.layout.input_chips, this)
-        chipsAdapter = ChipsAdapter(context, this, inputChipsRecycler)
-        filterableListView = FilterableListView(context)
+        materialChipsInputAdapter = MaterialChipsInputAdapter(context, this, inputChipsRecycler)
+        dropdownListView = DropdownListView(context)
 
         with(inputChipsRecycler) {
             isNestedScrollingEnabled = false
-            adapter = chipsAdapter
+            adapter = materialChipsInputAdapter
             layoutManager = ChipsLayoutManager.newBuilder(context)
                     .setOrientation(HORIZONTAL)
                     .build()
@@ -43,18 +41,18 @@ class MaterialChipsInput @JvmOverloads constructor(context: Context, attrs: Attr
     }
 
     internal fun onItemSelectedInternal(chip: Chip) {
-        chipsAdapter.addChip(chip)
+        materialChipsInputAdapter.addChip(chip)
     }
 
     internal fun onChipAddedInternal(chip: Chip) {
-        filterableListView.filterableAdapter.removeItem(chip)
+        dropdownListView.dropdownListViewAdapter.removeItem(chip)
     }
 
     internal fun onChipRemovedInternal(chip: Chip) {
-        filterableListView.filterableAdapter.addItem(chip)
+        dropdownListView.dropdownListViewAdapter.addItem(chip)
     }
 
     internal fun onTextChangedInternal(text: CharSequence?) {
-        filterableListView.processText(text)
+        dropdownListView.processText(text)
     }
 }
