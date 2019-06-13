@@ -23,23 +23,23 @@ internal class DropdownListView @JvmOverloads constructor(context: Context, attr
 
     lateinit var dropdownListViewAdapter: DropdownListViewAdapter
 
-    private lateinit var chipsInput: MaterialChipsInput
+    private lateinit var chipInput: MaterialChipInput
 
     init {
         View.inflate(context, R.layout.list_dropdown, this)
         visibility = GONE
     }
 
-    fun initialize(chipList: List<Chip>, chipsInput: MaterialChipsInput) {
-        this.chipsInput = chipsInput
+    fun initialize(chipList: List<Chip>, chipInput: MaterialChipInput) {
+        this.chipInput = chipInput
 
-        dropdownListViewAdapter = DropdownListViewAdapter(context, chipList, chipsInput)
+        dropdownListViewAdapter = DropdownListViewAdapter(context, chipList, chipInput)
         with(listDropdownRecycler) {
             layoutManager = LinearLayoutManager(context)
             adapter = dropdownListViewAdapter
         }
 
-        chipsInput.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+        chipInput.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
 
             override fun onGlobalLayout() {
                 val layoutParams = LayoutParams(context.resources.displayMetrics.widthPixels, MATCH_PARENT)
@@ -52,13 +52,13 @@ internal class DropdownListView @JvmOverloads constructor(context: Context, attr
                             }
                         }
 
-                (chipsInput.rootView as ViewGroup).addView(this@DropdownListView, layoutParams)
+                (chipInput.rootView as ViewGroup).addView(this@DropdownListView, layoutParams)
 
                 if (SDK_INT < JELLY_BEAN) {
                     @Suppress("DEPRECATION")
-                    chipsInput.viewTreeObserver.removeGlobalOnLayoutListener(this)
+                    chipInput.viewTreeObserver.removeGlobalOnLayoutListener(this)
                 } else {
-                    chipsInput.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                    chipInput.viewTreeObserver.removeOnGlobalLayoutListener(this)
                 }
             }
 
@@ -84,10 +84,10 @@ internal class DropdownListView @JvmOverloads constructor(context: Context, attr
         rootView.getWindowVisibleDisplayFrame(rect)
 
         val coordinators = IntArray(2)
-        chipsInput.getLocationInWindow(coordinators)
+        chipInput.getLocationInWindow(coordinators)
 
         val layoutParams = layoutParams as MarginLayoutParams
-        layoutParams.topMargin = coordinators[1] + chipsInput.height
+        layoutParams.topMargin = coordinators[1] + chipInput.height
 
         layoutParams.bottomMargin = rootView.height - rect.bottom
         setLayoutParams(layoutParams)

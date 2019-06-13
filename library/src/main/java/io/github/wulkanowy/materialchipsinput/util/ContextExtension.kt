@@ -7,9 +7,9 @@ import android.view.KeyCharacterMap
 import android.view.KeyEvent.KEYCODE_BACK
 import android.view.ViewConfiguration
 
-fun Context.convertDpToPixels(dp: Float) = dp * resources.displayMetrics.densityDpi / DENSITY_DEFAULT
+internal fun Context.convertDpToPixels(dp: Float) = dp * resources.displayMetrics.densityDpi / DENSITY_DEFAULT
 
-val Context.navBarHeight: Int
+internal val Context.navBarHeight: Int
     get() {
         if (!ViewConfiguration.get(this).hasPermanentMenuKey() && !KeyCharacterMap.deviceHasKey(KEYCODE_BACK)) {
             with(resources) {

@@ -9,10 +9,10 @@ import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager.HORIZONTAL
 import com.google.android.material.chip.Chip
 import kotlinx.android.synthetic.main.input_chips.view.*
 
-class MaterialChipsInput @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0)
+class MaterialChipInput @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0)
     : FrameLayout(context, attrs, defStyle) {
 
-    private var materialChipsInputAdapter: MaterialChipsInputAdapter
+    private var materialChipInputAdapter: MaterialChipInputAdapter
 
     private var dropdownListView: DropdownListView
 
@@ -24,16 +24,16 @@ class MaterialChipsInput @JvmOverloads constructor(context: Context, attrs: Attr
             }
         }
 
-    val selectedChipList get() = materialChipsInputAdapter.chipList
+    val selectedChipList get() = materialChipInputAdapter.chipList
 
     init {
         View.inflate(context, R.layout.input_chips, this)
-        materialChipsInputAdapter = MaterialChipsInputAdapter(context, this, inputChipsRecycler)
+        materialChipInputAdapter = MaterialChipInputAdapter(context, this, inputChipsRecycler)
         dropdownListView = DropdownListView(context)
 
         with(inputChipsRecycler) {
             isNestedScrollingEnabled = false
-            adapter = materialChipsInputAdapter
+            adapter = materialChipInputAdapter
             layoutManager = ChipsLayoutManager.newBuilder(context)
                     .setOrientation(HORIZONTAL)
                     .build()
@@ -41,7 +41,7 @@ class MaterialChipsInput @JvmOverloads constructor(context: Context, attrs: Attr
     }
 
     internal fun onItemSelectedInternal(chip: Chip) {
-        materialChipsInputAdapter.addChip(chip)
+        materialChipInputAdapter.addChip(chip)
     }
 
     internal fun onChipAddedInternal(chip: Chip) {

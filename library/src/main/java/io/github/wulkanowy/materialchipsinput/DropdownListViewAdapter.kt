@@ -13,7 +13,7 @@ import kotlinx.android.extensions.LayoutContainer
 internal class DropdownListViewAdapter(
         private val context: Context,
         originalChipList: List<Chip>,
-        private val chipsInput: MaterialChipsInput)
+        private val chipInput: MaterialChipInput)
     : RecyclerView.Adapter<DropdownListViewAdapter.ItemViewHolder>() {
 
     private val currentChipList = originalChipList.toMutableList()
@@ -35,7 +35,7 @@ internal class DropdownListViewAdapter(
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         with(holder) {
             itemView.setOnClickListener {
-                chipsInput.onItemSelectedInternal(filteredChipList[position])
+                chipInput.onItemSelectedInternal(filteredChipList[position])
             }
         }
     }

@@ -21,11 +21,11 @@ import com.google.android.material.chip.Chip
 import io.github.wulkanowy.materialchipsinput.util.convertDpToPixels
 
 
-class MaterialChipsInputAdapter(
+internal class MaterialChipInputAdapter(
         private val context: Context,
-        private val chipsInput: MaterialChipsInput,
+        private val chipInput: MaterialChipInput,
         private val recycler: RecyclerView)
-    : RecyclerView.Adapter<MaterialChipsInputAdapter.ItemViewHolder>() {
+    : RecyclerView.Adapter<MaterialChipInputAdapter.ItemViewHolder>() {
 
     val chipList = mutableListOf<Chip>()
 
@@ -61,7 +61,7 @@ class MaterialChipsInputAdapter(
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    chipsInput.onTextChangedInternal(s)
+                    chipInput.onTextChangedInternal(s)
                 }
             })
 
@@ -116,7 +116,7 @@ class MaterialChipsInputAdapter(
         }
         notifyItemInserted(chipList.size)
         recycler.smoothScrollToPosition(itemCount)
-        chipsInput.onChipAddedInternal(chip)
+        chipInput.onChipAddedInternal(chip)
     }
 
     private fun removeChip(position: Int) {
@@ -127,7 +127,7 @@ class MaterialChipsInputAdapter(
             chipEditText.hint = chipEditTextHint
         }
         notifyDataSetChanged()
-        chipsInput.onChipRemovedInternal(chip)
+        chipInput.onChipRemovedInternal(chip)
     }
 
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view)
