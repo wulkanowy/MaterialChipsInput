@@ -1,7 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'com.jakewharton.butterknife'
 
 android {
     compileSdkVersion 28
@@ -33,7 +32,4 @@ dependencies {
     implementation "com.google.android.material:material:1.1.0-alpha07"
     implementation 'de.hdodenhof:circleimageview:3.0.0'
     implementation 'com.beloo.widget:ChipsLayoutManager:0.3.7@aar'
-
-    implementation 'com.jakewharton:butterknife:10.1.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
 }

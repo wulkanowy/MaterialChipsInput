@@ -1,4 +1,4 @@
-package com.pchmn.materialchips.util;
+package io.github.wulkanowy.materialchipsinput.util;
 
 import android.content.Context;
 import android.content.res.Configuration;

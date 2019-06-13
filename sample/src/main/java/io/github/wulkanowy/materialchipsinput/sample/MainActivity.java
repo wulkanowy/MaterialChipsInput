@@ -1,4 +1,4 @@
-package com.pchmn.sample.materialchipsinput;
+package io.github.wulkanowy.materialchipsinput.sample;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,30 +8,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = MainActivity.class.toString();
-    @BindView(R.id.contacts_button) Button mContactListButton;
-    @BindView(R.id.custom_chips_button) Button mCustomChipsButton;
+    Button mContactListButton;
+    Button mCustomChipsButton;
     private int mStackLevel = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        // butter knife
-        ButterKnife.bind(this);
 
         mContactListButton.setOnClickListener(view -> {
             startActivity(new Intent(MainActivity.this, ContactListActivity.class));
         });
     }
 
-    @OnClick(R.id.dialog_fragment)
     public void showDialog() {
         mStackLevel++;
 

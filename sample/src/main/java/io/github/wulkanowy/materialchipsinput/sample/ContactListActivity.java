@@ -1,4 +1,4 @@
-package com.pchmn.sample.materialchipsinput;
+package io.github.wulkanowy.materialchipsinput.sample;
 
 import android.Manifest;
 import android.database.Cursor;
@@ -13,23 +13,21 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.chip.Chip;
-import com.pchmn.materialchips.MaterialChipsInput;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import io.github.wulkanowy.materialchipsinput.MaterialChipsInput;
 
 public class ContactListActivity extends AppCompatActivity {
 
     private static final String TAG = ContactListActivity.class.toString();
-    @BindView(R.id.chips_input)
+
     MaterialChipsInput mMaterialChipsInput;
-    @BindView(R.id.validate)
+
     Button mValidateButton;
-    @BindView(R.id.chip_list)
+
     TextView mChipListText;
     private List<Chip> mContactList;
 
@@ -38,7 +36,6 @@ public class ContactListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_list);
         // butter knife
-        ButterKnife.bind(this);
         mContactList = new ArrayList<>();
 
         // get contact list

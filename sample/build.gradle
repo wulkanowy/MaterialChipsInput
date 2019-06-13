@@ -1,14 +1,13 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'com.jakewharton.butterknife'
 
 android {
     compileSdkVersion 28
     buildToolsVersion '28.0.3'
 
     defaultConfig {
-        applicationId "com.pchmn.sample.materialchipsinput"
+        applicationId "io.github.wulkanowy.materialchipsinput.sample"
         minSdkVersion 15
         targetSdkVersion 28
         versionCode 10
@@ -41,7 +40,4 @@ dependencies {
 
     implementation 'io.reactivex.rxjava2:rxjava:2.2.9'
     implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
-
-    implementation 'com.jakewharton:butterknife:10.1.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
 }

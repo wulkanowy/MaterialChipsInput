@@ -1,14 +1,14 @@
-package com.pchmn.materialchips.views;
+package io.github.wulkanowy.materialchipsinput.views;
 
 
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 
-import com.pchmn.materialchips.R;
-import com.pchmn.materialchips.util.ViewUtil;
-
 import androidx.core.widget.NestedScrollView;
+
+import io.github.wulkanowy.materialchipsinput.R;
+import io.github.wulkanowy.materialchipsinput.util.ViewUtil;
 
 public class ScrollViewMaxHeight extends NestedScrollView {
 
@@ -29,8 +29,7 @@ public class ScrollViewMaxHeight extends NestedScrollView {
 
         try {
             mMaxHeight = a.getDimensionPixelSize(R.styleable.ScrollViewMaxHeight_maxHeight, ViewUtil.dpToPx(300));
-        }
-        finally {
+        } finally {
             a.recycle();
         }
     }

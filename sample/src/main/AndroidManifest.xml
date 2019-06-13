@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.pchmn.sample.materialchipsinput">
+    package="io.github.wulkanowy.materialchipsinput.sample">
 
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
@@ -14,13 +14,13 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <activity android:name=".MainActivity">
+        <activity android:name="io.github.wulkanowy.materialchipsinput.sample.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ContactListActivity" />
+        <activity android:name="io.github.wulkanowy.materialchipsinput.sample.ContactListActivity" />
     </application>
 
 </manifest>

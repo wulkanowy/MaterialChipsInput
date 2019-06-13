@@ -1,4 +1,4 @@
-package com.pchmn.materialchips.adapter
+package io.github.wulkanowy.materialchipsinput.adapter
 
 
 import android.content.Context
@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import android.widget.Filter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
-import com.pchmn.materialchips.MaterialChipsInput
-import com.pchmn.materialchips.R
+import io.github.wulkanowy.materialchipsinput.MaterialChipsInput
+import io.github.wulkanowy.materialchipsinput.R
 import kotlinx.android.extensions.LayoutContainer
 
 internal class FilterableAdapter(

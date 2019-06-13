@@ -1,5 +1,5 @@
 /*
-package com.pchmn.materialchips.util;
+package com.github.materialchips.util;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -16,7 +16,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
 
-import com.pchmn.materialchips.R;
+import com.github.materialchips.R;
 
 import androidx.core.content.ContextCompat;
 

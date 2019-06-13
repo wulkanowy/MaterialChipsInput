@@ -1,4 +1,4 @@
-package com.pchmn.materialchips.adapter
+package io.github.wulkanowy.materialchipsinput.adapter
 
 import android.content.Context
 import android.os.Build.VERSION.SDK_INT
@@ -18,8 +18,8 @@ import android.widget.RelativeLayout
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.chip.Chip
-import com.pchmn.materialchips.MaterialChipsInput
-import com.pchmn.materialchips.util.ViewUtil
+import io.github.wulkanowy.materialchipsinput.MaterialChipsInput
+import io.github.wulkanowy.materialchipsinput.util.ViewUtil
 
 
 class ChipsAdapter(

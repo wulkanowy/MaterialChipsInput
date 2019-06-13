@@ -1,4 +1,4 @@
-package com.pchmn.materialchips
+package io.github.wulkanowy.materialchipsinput
 
 import android.content.Context
 import android.util.AttributeSet
@@ -7,8 +7,8 @@ import android.widget.FrameLayout
 import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager
 import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager.HORIZONTAL
 import com.google.android.material.chip.Chip
-import com.pchmn.materialchips.adapter.ChipsAdapter
-import com.pchmn.materialchips.views.FilterableListView
+import io.github.wulkanowy.materialchipsinput.adapter.ChipsAdapter
+import io.github.wulkanowy.materialchipsinput.views.FilterableListView
 import kotlinx.android.synthetic.main.input_chips.view.*
 
 class MaterialChipsInput @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0)

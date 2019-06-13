@@ -1,4 +1,4 @@
-package com.pchmn.materialchips.views
+package io.github.wulkanowy.materialchipsinput.views
 
 
 import android.content.Context
@@ -15,10 +15,10 @@ import android.view.animation.AlphaAnimation
 import android.widget.RelativeLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
-import com.pchmn.materialchips.MaterialChipsInput
-import com.pchmn.materialchips.R
-import com.pchmn.materialchips.adapter.FilterableAdapter
-import com.pchmn.materialchips.util.ViewUtil
+import io.github.wulkanowy.materialchipsinput.MaterialChipsInput
+import io.github.wulkanowy.materialchipsinput.R
+import io.github.wulkanowy.materialchipsinput.adapter.FilterableAdapter
+import io.github.wulkanowy.materialchipsinput.util.ViewUtil
 import kotlinx.android.synthetic.main.list_dropdown.view.*
 
 internal class FilterableListView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0)

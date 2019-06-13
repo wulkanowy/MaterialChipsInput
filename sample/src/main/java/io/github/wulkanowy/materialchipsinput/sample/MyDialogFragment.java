@@ -1,4 +1,4 @@
-package com.pchmn.sample.materialchipsinput;
+package io.github.wulkanowy.materialchipsinput.sample;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
