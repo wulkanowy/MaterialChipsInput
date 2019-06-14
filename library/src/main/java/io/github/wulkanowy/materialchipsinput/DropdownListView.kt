@@ -15,6 +15,8 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewTreeObserver
 import android.view.animation.AlphaAnimation
 import android.widget.RelativeLayout
+import androidx.core.view.marginLeft
+import androidx.core.view.updateMargins
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
 import io.github.wulkanowy.materialchipsinput.util.navBarHeight
@@ -95,12 +97,12 @@ internal class DropdownListView @JvmOverloads constructor(context: Context, attr
         val coordinators = IntArray(2)
         chipInput.getLocationInWindow(coordinators)
 
-        val layoutParams = layoutParams as MarginLayoutParams
-        layoutParams.topMargin = coordinators[1] + chipInput.height
-
-        layoutParams.bottomMargin = rootView.height - rect.bottom
-        setLayoutParams(layoutParams)
-
+        (layoutParams as MarginLayoutParams).updateMargins(
+                top = coordinators[1] + chipInput.height,
+                bottom = rootView.height - rect.bottom,
+                left = if (rect.left > 0) rect.left else marginLeft
+        )
+        requestLayout()
         startAnimation(AlphaAnimation(0.0f, 1.0f).apply { duration = 200 })
         visibility = VISIBLE
     }
