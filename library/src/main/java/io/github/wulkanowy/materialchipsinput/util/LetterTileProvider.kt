@@ -1,4 +1,4 @@
-package com.pchmn.materialchips.util
+package io.github.wulkanowy.materialchipsinput.util
 
 import android.content.Context
 import android.content.res.TypedArray
@@ -9,7 +9,7 @@ import android.graphics.Paint.Align.CENTER
 import android.graphics.Typeface.NORMAL
 import android.text.TextPaint
 import androidx.core.graphics.TypefaceCompat
-import io.github.wulkanowy.materialchipsinput.util.convertDpToPixels
+import androidx.core.graphics.applyCanvas
 
 internal class LetterTileProvider(private val context: Context) {
 
@@ -65,19 +65,12 @@ internal class LetterTileProvider(private val context: Context) {
     fun getCircularLetterTile(displayName: String?): Bitmap {
         val bitmap = getLetterTile(displayName)
 
-        val output = if (bitmap.width > bitmap.height) {
-            Bitmap.createBitmap(bitmap.height, bitmap.height, Bitmap.Config.ARGB_8888)
-        } else {
-            Bitmap.createBitmap(bitmap.width, bitmap.width, Bitmap.Config.ARGB_8888)
-        }
-
         val dimension = if (bitmap.width > bitmap.height) {
             (bitmap.height / 2).toFloat()
         } else {
             (bitmap.width / 2).toFloat()
         }
 
-        val canvas = Canvas(output)
         val bitmapPaint = Paint()
         val rect = Rect(0, 0, bitmap.width, bitmap.height)
 
@@ -87,12 +80,17 @@ internal class LetterTileProvider(private val context: Context) {
             xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
         }
 
-        with(canvas) {
+        val output = if (bitmap.width > bitmap.height) {
+            Bitmap.createBitmap(bitmap.height, bitmap.height, Bitmap.Config.ARGB_8888)
+        } else {
+            Bitmap.createBitmap(bitmap.width, bitmap.width, Bitmap.Config.ARGB_8888)
+        }
+
+        return output.applyCanvas {
             drawARGB(0, 0, 0, 0)
             drawCircle(dimension, dimension, dimension, bitmapPaint)
             drawBitmap(bitmap, rect, rect, bitmapPaint)
         }
-        return output
     }
 
     private fun pickColor(key: String) = colors.getColor(Math.abs(key.hashCode()) % 8, BLACK)
