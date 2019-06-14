@@ -44,7 +44,7 @@ internal class DropdownListViewAdapter(
         }
     }
 
-    fun processText(text: CharSequence, onComplete: (filteredCount: Int) -> Unit) {
+    fun filterText(text: CharSequence, onComplete: (filteredCount: Int) -> Unit) {
         chipFilter.filter(text, onComplete)
     }
 

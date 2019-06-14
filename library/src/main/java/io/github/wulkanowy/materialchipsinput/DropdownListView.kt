@@ -68,15 +68,17 @@ internal class DropdownListView @JvmOverloads constructor(context: Context, attr
         })
     }
 
-    fun processText(text: CharSequence?) {
+    fun processChangedText(text: CharSequence?) {
         if (text.isNullOrBlank()) {
             fadeOut()
             return
         }
 
-        dropdownListViewAdapter.processText(text) {
-            if (it > 0) fadeIn()
-            else fadeOut()
+        dropdownListViewAdapter.filterText(text) {
+            if (it > 0) {
+                fadeIn()
+                listDropdownRecycler.smoothScrollToPosition(0)
+            } else fadeOut()
         }
     }
 

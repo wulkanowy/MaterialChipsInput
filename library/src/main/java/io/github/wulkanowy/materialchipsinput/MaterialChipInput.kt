@@ -53,7 +53,7 @@ class MaterialChipInput @JvmOverloads constructor(context: Context, attrs: Attri
     }
 
     internal fun onTextChanged(text: CharSequence?) {
-        dropdownListView.processText(text)
+        dropdownListView.processChangedText(text)
     }
 
     override fun dispatchKeyEventPreIme(event: KeyEvent): Boolean {
