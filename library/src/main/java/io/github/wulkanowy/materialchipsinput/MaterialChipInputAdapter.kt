@@ -50,7 +50,7 @@ internal class MaterialChipInputAdapter(
             inputType = TYPE_TEXT_VARIATION_FILTER or TYPE_TEXT_FLAG_NO_SUGGESTIONS
 
             setOnKeyListener { _, _, event ->
-                if (event.action == ACTION_DOWN && event.keyCode == KEYCODE_DEL) {
+                if (event.action == ACTION_DOWN && event.keyCode == KEYCODE_DEL && chipList.isNotEmpty()) {
                     removeChip(chipList.size - 1)
                 }
                 false
