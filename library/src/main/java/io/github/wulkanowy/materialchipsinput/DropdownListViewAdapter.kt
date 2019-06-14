@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import androidx.recyclerview.widget.RecyclerView
+import io.github.wulkanowy.materialchipsinput.util.createLetterBitmap
 import kotlinx.android.extensions.LayoutContainer
+import kotlinx.android.synthetic.main.item_dropdown_list.*
 
 internal class DropdownListViewAdapter(
         originalChipList: List<MaterialChipItem>,
@@ -33,10 +35,11 @@ internal class DropdownListViewAdapter(
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         with(holder) {
-            itemView.setOnClickListener {
-                filteredChipList.getOrNull(position)?.let {
-                    chipInput.onItemInListSelected(it)
-                }
+            filteredChipList.getOrNull(position)?.let { materialChipItem ->
+                itemDropdownAvatar.setImageBitmap(createLetterBitmap(context, materialChipItem.title))
+                itemDropdownTitle.text = materialChipItem.title
+                itemDropdownSummary.text = materialChipItem.summary
+                itemView.setOnClickListener { chipInput.onItemInListSelected(materialChipItem) }
             }
         }
     }
