@@ -101,9 +101,11 @@ internal class MaterialChipInputAdapter(
                 })
 
             }
-        } else if (itemCount > 1) {
+        } else {
             with(holder.itemView as Chip) {
-                text = position.toString()
+                chipList.getOrNull(position)?.let { materialChipItem ->
+                    text = materialChipItem.title
+                }
             }
         }
     }
