@@ -27,7 +27,7 @@ internal class MaterialChipInputAdapter(
         private val recycler: RecyclerView)
     : RecyclerView.Adapter<MaterialChipInputAdapter.ItemViewHolder>() {
 
-    val chipList = mutableListOf<Chip>()
+    val chipList = mutableListOf<MaterialChipItem>()
 
     private val chipEditTextHint: String = "Hint"
 
@@ -108,26 +108,26 @@ internal class MaterialChipInputAdapter(
         }
     }
 
-    fun addChip(chip: Chip) {
-        chipList.add(chip)
+    fun addChip(chipItem: MaterialChipItem) {
+        chipList.add(chipItem)
         with(chipEditText) {
             hint = null
             text = null
         }
         notifyItemInserted(chipList.size)
         recycler.smoothScrollToPosition(itemCount)
-        chipInput.onChipAdded(chip)
+        chipInput.onChipAdded(chipItem)
     }
 
     private fun removeChip(position: Int) {
-        val chip = chipList[position]
-        chipList.remove(chip)
+        val chipItem = chipList[position]
+        chipList.remove(chipItem)
 
         if (chipList.isEmpty()) {
             chipEditText.hint = chipEditTextHint
         }
         notifyDataSetChanged()
-        chipInput.onChipRemoved(chip)
+        chipInput.onChipRemoved(chipItem)
     }
 
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view)

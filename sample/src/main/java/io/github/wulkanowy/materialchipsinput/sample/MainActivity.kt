@@ -6,15 +6,15 @@ import android.provider.ContactsContract.Contacts.CONTENT_URI
 import android.provider.ContactsContract.Contacts.DISPLAY_NAME
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContentResolverCompat
-import com.google.android.material.chip.Chip
 import com.tbruyelle.rxpermissions2.RxPermissions
+import io.github.wulkanowy.materialchipsinput.MaterialChipItem
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    private var contactList: MutableList<Chip>? = null
+    private var contactList: MutableList<ChipItem>? = null
 
     private val disposable = CompositeDisposable()
 
@@ -32,9 +32,10 @@ class MainActivity : AppCompatActivity() {
                             ?: return@subscribeBy
 
                     while (contactsQuery.moveToNext()) {
-                        contactList?.add(Chip(this).apply {
-                            text = contactsQuery.run { getString(getColumnIndex(DISPLAY_NAME)) }
-                        })
+                        contactList?.add(ChipItem(
+                                title = contactsQuery.run { getString(getColumnIndex(DISPLAY_NAME)) },
+                                summary = ""
+                        ))
                     }
 
                     contactsQuery.close()
@@ -46,4 +47,6 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         disposable.clear()
     }
+
+    data class ChipItem(override val title: String, override val summary: String) : MaterialChipItem
 }

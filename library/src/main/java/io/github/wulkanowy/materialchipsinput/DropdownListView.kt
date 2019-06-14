@@ -18,7 +18,6 @@ import android.widget.RelativeLayout
 import androidx.core.view.marginLeft
 import androidx.core.view.updateMargins
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.chip.Chip
 import io.github.wulkanowy.materialchipsinput.util.navBarHeight
 import kotlinx.android.synthetic.main.list_dropdown.view.*
 
@@ -34,10 +33,10 @@ internal class DropdownListView @JvmOverloads constructor(context: Context, attr
         visibility = GONE
     }
 
-    fun initialize(chipList: List<Chip>, chipInput: MaterialChipInput) {
+    fun initialize(chipList: List<MaterialChipItem>, chipInput: MaterialChipInput) {
         this.chipInput = chipInput
 
-        dropdownListViewAdapter = DropdownListViewAdapter(context, chipList, chipInput)
+        dropdownListViewAdapter = DropdownListViewAdapter(chipList, context, chipInput)
         with(listDropdownRecycler) {
             layoutManager = LinearLayoutManager(context)
             adapter = dropdownListViewAdapter

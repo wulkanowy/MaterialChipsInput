@@ -7,12 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.chip.Chip
 import kotlinx.android.extensions.LayoutContainer
 
 internal class DropdownListViewAdapter(
+        originalChipList: List<MaterialChipItem>,
         private val context: Context,
-        originalChipList: List<Chip>,
         private val chipInput: MaterialChipInput)
     : RecyclerView.Adapter<DropdownListViewAdapter.ItemViewHolder>() {
 
@@ -35,7 +34,7 @@ internal class DropdownListViewAdapter(
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         with(holder) {
             itemView.setOnClickListener {
-                chipInput.onItemSelected(filteredChipList[position])
+                chipInput.onItemInListSelected(filteredChipList[position])
             }
         }
     }
@@ -44,8 +43,8 @@ internal class DropdownListViewAdapter(
         chipFilter.filter(text, onComplete)
     }
 
-    fun removeItem(chip: Chip) {
-        currentChipList.remove(chip)
+    fun removeItem(chipItem: MaterialChipItem) {
+        currentChipList.remove(chipItem)
         with(filteredChipList) {
             clear()
             addAll(currentChipList)
@@ -53,13 +52,12 @@ internal class DropdownListViewAdapter(
         notifyDataSetChanged()
     }
 
-    fun addItem(chip: Chip) {
-        currentChipList.add(chip)
+    fun addItem(chipItem: MaterialChipItem) {
+        currentChipList.add(chipItem)
         with(filteredChipList) {
             clear()
             addAll(currentChipList)
         }
-        notifyDataSetChanged()
         notifyDataSetChanged()
     }
 
@@ -72,14 +70,14 @@ internal class DropdownListViewAdapter(
 
         override fun performFiltering(constraint: CharSequence): FilterResults {
             val originalList = adapter.currentChipList
-            val filteredList = mutableListOf<Chip>()
+            val filteredList = mutableListOf<MaterialChipItem>()
 
             if (constraint.isBlank()) {
                 filteredList.addAll(originalList)
             } else {
                 val pattern = constraint.toString().toLowerCase().trim()
                 originalList.forEach {
-                    if (it.text.toString().toLowerCase().contains(pattern)) {
+                    if (it.title.toLowerCase().contains(pattern)) {
                         filteredList.add(it)
                     }
                 }
@@ -95,7 +93,7 @@ internal class DropdownListViewAdapter(
         override fun publishResults(constraint: CharSequence, results: FilterResults) {
             with(adapter) {
                 filteredChipList.clear()
-                filteredChipList.addAll(results.values as List<Chip>)
+                filteredChipList.addAll(results.values as List<MaterialChipItem>)
                 notifyDataSetChanged()
             }
         }

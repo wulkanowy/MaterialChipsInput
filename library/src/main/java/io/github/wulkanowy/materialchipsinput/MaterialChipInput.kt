@@ -7,7 +7,6 @@ import android.view.View
 import android.widget.FrameLayout
 import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager
 import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager.HORIZONTAL
-import com.google.android.material.chip.Chip
 import kotlinx.android.synthetic.main.input_chips.view.*
 
 class MaterialChipInput @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0)
@@ -17,7 +16,7 @@ class MaterialChipInput @JvmOverloads constructor(context: Context, attrs: Attri
 
     private var dropdownListView: DropdownListView
 
-    var itemList: List<Chip>? = null
+    var itemList: List<MaterialChipItem>? = null
         set(list) {
             field = list
             list?.let {
@@ -41,16 +40,16 @@ class MaterialChipInput @JvmOverloads constructor(context: Context, attrs: Attri
         }
     }
 
-    internal fun onItemSelected(chip: Chip) {
-        materialChipInputAdapter.addChip(chip)
+    internal fun onItemInListSelected(chipItem: MaterialChipItem) {
+        materialChipInputAdapter.addChip(chipItem)
     }
 
-    internal fun onChipAdded(chip: Chip) {
-        dropdownListView.dropdownListViewAdapter.removeItem(chip)
+    internal fun onChipAdded(chipItem: MaterialChipItem) {
+        dropdownListView.dropdownListViewAdapter.removeItem(chipItem)
     }
 
-    internal fun onChipRemoved(chip: Chip) {
-        dropdownListView.dropdownListViewAdapter.addItem(chip)
+    internal fun onChipRemoved(chipItem: MaterialChipItem) {
+        dropdownListView.dropdownListViewAdapter.addItem(chipItem)
     }
 
     internal fun onTextChanged(text: CharSequence?) {
