@@ -34,7 +34,9 @@ internal class DropdownListViewAdapter(
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         with(holder) {
             itemView.setOnClickListener {
-                chipInput.onItemInListSelected(filteredChipList[position])
+                filteredChipList.getOrNull(position)?.let {
+                    chipInput.onItemInListSelected(it)
+                }
             }
         }
     }
