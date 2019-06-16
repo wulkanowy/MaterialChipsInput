@@ -1,12 +1,13 @@
 package io.github.wulkanowy.materialchipsinput
 
 import android.content.Context
+import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.KeyEvent
+import android.view.MotionEvent
 import android.view.View
 import android.widget.FrameLayout
-import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager
-import com.beloo.widget.chipslayoutmanager.ChipsLayoutManager.HORIZONTAL
+import com.google.android.flexbox.FlexWrap
 import kotlinx.android.synthetic.main.input_chips.view.*
 
 class MaterialChipInput @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0)
@@ -34,9 +35,9 @@ class MaterialChipInput @JvmOverloads constructor(context: Context, attrs: Attri
         with(inputChipsRecycler) {
             isNestedScrollingEnabled = false
             adapter = materialChipInputAdapter
-            layoutManager = ChipsLayoutManager.newBuilder(context)
-                    .setOrientation(HORIZONTAL)
-                    .build()
+            layoutManager = FixedFlexboxLayoutManager(context).apply {
+                flexWrap = FlexWrap.WRAP
+            }
         }
     }
 
@@ -59,5 +60,26 @@ class MaterialChipInput @JvmOverloads constructor(context: Context, attrs: Attri
     override fun dispatchKeyEventPreIme(event: KeyEvent): Boolean {
         val isConsumed = dropdownListView.processKeyEvent(event)
         return if (isConsumed) true else super.dispatchKeyEventPreIme(event)
+    }
+
+    override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
+        var isHandled = false
+        val editHitRect = Rect()
+        materialChipInputAdapter.chipEditText.getHitRect(editHitRect)
+
+        val recyclerHitRect = Rect()
+        inputChipsRecycler.getHitRect(recyclerHitRect)
+
+        val extendedHitRect = Rect(editHitRect.right, editHitRect.top, recyclerHitRect.right, editHitRect.bottom)
+
+        event?.let {
+            if (extendedHitRect.contains(it.x.toInt(), it.y.toInt())) {
+                materialChipInputAdapter.chipEditText.apply {
+                    isHandled = materialChipInputAdapter.chipEditText.dispatchTouchEvent(it)
+                }
+            }
+        }
+
+        return if (isHandled) true else super.dispatchTouchEvent(event)
     }
 }

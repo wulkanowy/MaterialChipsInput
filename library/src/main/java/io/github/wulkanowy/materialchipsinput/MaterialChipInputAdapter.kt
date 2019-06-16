@@ -1,18 +1,14 @@
 package io.github.wulkanowy.materialchipsinput
 
 import android.content.Context
-import android.os.Build.VERSION.SDK_INT
-import android.os.Build.VERSION_CODES.JELLY_BEAN
 import android.text.Editable
-import android.text.InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
-import android.text.InputType.TYPE_TEXT_VARIATION_FILTER
+import android.text.InputType.*
 import android.text.TextWatcher
 import android.view.KeyEvent.ACTION_DOWN
 import android.view.KeyEvent.KEYCODE_DEL
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
-import android.view.ViewTreeObserver
 import android.view.inputmethod.EditorInfo.IME_FLAG_NO_EXTRACT_UI
 import android.widget.RelativeLayout
 import androidx.appcompat.widget.AppCompatEditText
@@ -31,7 +27,7 @@ internal class MaterialChipInputAdapter(
 
     private val chipEditTextHint: String = "Hint"
 
-    private val chipEditText: AppCompatEditText = AppCompatEditText(context)
+    val chipEditText: AppCompatEditText = AppCompatEditText(context)
 
     companion object {
 
@@ -43,11 +39,12 @@ internal class MaterialChipInputAdapter(
     init {
         with(chipEditText) {
             layoutParams = RelativeLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
+            minWidth = context.convertDpToPixels(10f).toInt()
             hint = chipEditTextHint
             setBackgroundResource(android.R.color.transparent)
             imeOptions = IME_FLAG_NO_EXTRACT_UI
             privateImeOptions = "nm"
-            inputType = TYPE_TEXT_VARIATION_FILTER or TYPE_TEXT_FLAG_NO_SUGGESTIONS
+            inputType = TYPE_TEXT_VARIATION_FILTER or TYPE_TEXT_FLAG_NO_SUGGESTIONS or TYPE_CLASS_TEXT or TYPE_TEXT_FLAG_MULTI_LINE
 
             setOnKeyListener { _, _, event ->
                 if (event.action == ACTION_DOWN && event.keyCode == KEYCODE_DEL && chipList.isNotEmpty()) {
@@ -80,27 +77,7 @@ internal class MaterialChipInputAdapter(
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         if (getItemViewType(position) == TYPE_EDIT_TEXT) {
-            with(holder.itemView as AppCompatEditText) {
-                if (chipList.isEmpty()) hint = chipEditTextHint
-                layoutParams = layoutParams.apply { width = context.convertDpToPixels(50f).toInt() }
-
-                viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-                    override fun onGlobalLayout() {
-                        layoutParams = layoutParams.apply {
-                            width = recycler.right - left - context.convertDpToPixels(8f).toInt()
-                        }
-                        requestFocus()
-
-                        if (SDK_INT < JELLY_BEAN) {
-                            @Suppress("DEPRECATION")
-                            viewTreeObserver.removeGlobalOnLayoutListener(this)
-                        } else {
-                            viewTreeObserver.removeOnGlobalLayoutListener(this)
-                        }
-                    }
-                })
-
-            }
+            holder.itemView.requestFocus()
         } else {
             with(holder.itemView as Chip) {
                 chipList.getOrNull(position)?.let { materialChipItem ->
