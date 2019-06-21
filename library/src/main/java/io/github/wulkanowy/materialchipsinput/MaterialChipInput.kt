@@ -2,20 +2,33 @@ package io.github.wulkanowy.materialchipsinput
 
 import android.content.Context
 import android.graphics.Rect
+import android.text.Editable
+import android.text.InputType.*
+import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.KeyEvent
+import android.view.KeyEvent.ACTION_DOWN
+import android.view.KeyEvent.KEYCODE_DEL
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.view.inputmethod.EditorInfo.IME_FLAG_NO_EXTRACT_UI
 import android.widget.FrameLayout
-import com.google.android.flexbox.FlexWrap
+import android.widget.RelativeLayout
+import androidx.appcompat.widget.AppCompatEditText
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
+import io.github.wulkanowy.materialchipsinput.util.convertDpToPixels
 import kotlinx.android.synthetic.main.input_chips.view.*
 
 class MaterialChipInput @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0)
     : FrameLayout(context, attrs, defStyle) {
 
-    private var materialChipInputAdapter: MaterialChipInputAdapter
+    private val dropdownListView = DropdownListView(context)
 
-    private var dropdownListView: DropdownListView
+    private var chipEditText = AppCompatEditText(context)
+
+    private val insertedChipList = mutableListOf<MaterialChipItem>()
 
     var itemList: List<MaterialChipItem>? = null
         set(list) {
@@ -25,35 +38,67 @@ class MaterialChipInput @JvmOverloads constructor(context: Context, attrs: Attri
             }
         }
 
-    val selectedChipList get() = materialChipInputAdapter.chipList
-
     init {
         View.inflate(context, R.layout.input_chips, this)
-        materialChipInputAdapter = MaterialChipInputAdapter(context, this, inputChipsRecycler)
-        dropdownListView = DropdownListView(context)
 
-        with(inputChipsRecycler) {
-            isNestedScrollingEnabled = false
-            adapter = materialChipInputAdapter
-            layoutManager = FixedFlexboxLayoutManager(context).apply {
-                flexWrap = FlexWrap.WRAP
+        with(chipEditText) {
+            layoutParams = RelativeLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
+            minWidth = context.convertDpToPixels(10f).toInt()
+            hint = "Hint"
+            setBackgroundResource(android.R.color.transparent)
+            imeOptions = IME_FLAG_NO_EXTRACT_UI
+            privateImeOptions = "nm"
+            inputType = TYPE_TEXT_VARIATION_FILTER or TYPE_TEXT_FLAG_NO_SUGGESTIONS or TYPE_CLASS_TEXT or TYPE_TEXT_FLAG_MULTI_LINE
+
+            setOnKeyListener { _, _, event ->
+                if (event.action == ACTION_DOWN && event.keyCode == KEYCODE_DEL && insertedChipList.isNotEmpty()) {
+                    val parent = chipEditText.parent as ChipGroup
+                    parent.removeViewAt(parent.childCount - 2)
+
+                    val chip = insertedChipList.elementAt(insertedChipList.size - 1)
+                    insertedChipList.remove(chip)
+                    if (insertedChipList.isEmpty()) {
+                        chipEditText.hint = "Hint"
+                    }
+                    onChipRemoved(chip)
+                }
+                false
             }
+
+            addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(s: Editable?) {}
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    onTextChanged(s)
+                }
+            })
+
         }
+
+        inputChipGroup.addView(chipEditText)
+        chipEditText.post { chipEditText.requestFocus() }
     }
 
     internal fun onItemInListSelected(chipItem: MaterialChipItem) {
-        materialChipInputAdapter.addChip(chipItem)
+        insertedChipList.add(chipItem)
+        with(chipEditText) {
+            hint = null
+            text = null
+        }
+        inputChipGroup.addView(Chip(context).apply { text = chipItem.title }, inputChipGroup.childCount - 1)
+        onChipAdded(chipItem)
     }
 
-    internal fun onChipAdded(chipItem: MaterialChipItem) {
+    private fun onChipAdded(chipItem: MaterialChipItem) {
         dropdownListView.dropdownListViewAdapter.removeItem(chipItem)
     }
 
-    internal fun onChipRemoved(chipItem: MaterialChipItem) {
+    private fun onChipRemoved(chipItem: MaterialChipItem) {
         dropdownListView.dropdownListViewAdapter.addItem(chipItem)
     }
 
-    internal fun onTextChanged(text: CharSequence?) {
+    private fun onTextChanged(text: CharSequence?) {
         dropdownListView.processChangedText(text)
     }
 
@@ -65,21 +110,20 @@ class MaterialChipInput @JvmOverloads constructor(context: Context, attrs: Attri
     override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
         var isHandled = false
         val editHitRect = Rect()
-        materialChipInputAdapter.chipEditText.getHitRect(editHitRect)
+        chipEditText.getHitRect(editHitRect)
 
         val recyclerHitRect = Rect()
-        inputChipsRecycler.getHitRect(recyclerHitRect)
+        inputChipGroup.getHitRect(recyclerHitRect)
 
         val extendedHitRect = Rect(editHitRect.right, editHitRect.top, recyclerHitRect.right, editHitRect.bottom)
 
         event?.let {
             if (extendedHitRect.contains(it.x.toInt(), it.y.toInt())) {
-                materialChipInputAdapter.chipEditText.apply {
-                    isHandled = materialChipInputAdapter.chipEditText.dispatchTouchEvent(it)
+                chipEditText.apply {
+                    isHandled = chipEditText.dispatchTouchEvent(it)
                 }
             }
         }
-
         return if (isHandled) true else super.dispatchTouchEvent(event)
     }
 }
