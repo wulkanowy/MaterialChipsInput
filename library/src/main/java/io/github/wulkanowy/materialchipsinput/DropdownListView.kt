@@ -21,12 +21,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import io.github.wulkanowy.materialchipsinput.util.navBarHeight
 import kotlinx.android.synthetic.main.list_dropdown.view.*
 
-internal class DropdownListView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0)
-    : RelativeLayout(context, attrs, defStyle) {
+internal class DropdownListView : RelativeLayout {
 
     lateinit var dropdownListViewAdapter: DropdownListViewAdapter
 
     private lateinit var chipInput: MaterialChipInput
+
+    constructor(context: Context) : super(context)
+
+    constructor(context: Context, attr: AttributeSet) : super(context, attr)
+
+    constructor(context: Context, attr: AttributeSet, defStyleAttr: Int) : super(context, attr, defStyleAttr)
 
     init {
         View.inflate(context, R.layout.list_dropdown, this)

@@ -10,6 +10,7 @@ import android.graphics.Typeface.NORMAL
 import android.text.TextPaint
 import androidx.core.graphics.TypefaceCompat
 import androidx.core.graphics.applyCanvas
+import kotlin.math.abs
 
 private val materialColors = listOf(
         0xffe57373,
@@ -44,7 +45,7 @@ fun createLetterBitmap(context: Context, text: String): Bitmap {
         getTextBounds(firstChar, 0, 1, bounds)
     }
     return Bitmap.createBitmap(dimension, dimension, Bitmap.Config.ARGB_8888).applyCanvas {
-        drawColor(materialColors[Math.abs(text.hashCode()) % materialColors.size].toInt())
+        drawColor(materialColors[abs(text.hashCode()) % materialColors.size].toInt())
         drawText(firstChar, 0, 1, (dimension / 2).toFloat(), (dimension / 2 + (bounds.bottom - bounds.top) / 2).toFloat(), paint)
     }
 }

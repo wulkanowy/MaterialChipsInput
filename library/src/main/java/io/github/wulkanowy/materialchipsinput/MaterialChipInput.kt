@@ -14,21 +14,25 @@ import android.view.View
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.inputmethod.EditorInfo.IME_FLAG_NO_EXTRACT_UI
 import android.widget.FrameLayout
-import android.widget.RelativeLayout
-import androidx.appcompat.widget.AppCompatEditText
+import androidx.core.view.setPadding
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import io.github.wulkanowy.materialchipsinput.util.convertDpToPixels
 import kotlinx.android.synthetic.main.input_chips.view.*
 
-class MaterialChipInput @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0)
-    : FrameLayout(context, attrs, defStyle) {
+class MaterialChipInput : FrameLayout {
 
     private val dropdownListView = DropdownListView(context)
 
-    private var chipEditText = AppCompatEditText(context)
+    private var chipEditText = MaterialChipEditText(context)
 
     private val insertedChipList = mutableListOf<MaterialChipItem>()
+
+    constructor(context: Context) : super(context)
+
+    constructor(context: Context, attr: AttributeSet) : super(context, attr)
+
+    constructor(context: Context, attr: AttributeSet, defStyleAttr: Int) : super(context, attr, defStyleAttr)
 
     var itemList: List<MaterialChipItem>? = null
         set(list) {
@@ -42,18 +46,19 @@ class MaterialChipInput @JvmOverloads constructor(context: Context, attrs: Attri
         View.inflate(context, R.layout.input_chips, this)
 
         with(chipEditText) {
-            layoutParams = RelativeLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
+            layoutParams = ChipGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
+            minHeight = context.convertDpToPixels(32f).toInt()
             minWidth = context.convertDpToPixels(10f).toInt()
             hint = "Hint"
-            setBackgroundResource(android.R.color.transparent)
             imeOptions = IME_FLAG_NO_EXTRACT_UI
             privateImeOptions = "nm"
             inputType = TYPE_TEXT_VARIATION_FILTER or TYPE_TEXT_FLAG_NO_SUGGESTIONS or TYPE_CLASS_TEXT or TYPE_TEXT_FLAG_MULTI_LINE
+            setPadding(0)
+            setBackgroundResource(android.R.color.transparent)
 
             setOnKeyListener { _, _, event ->
-                if (event.action == ACTION_DOWN && event.keyCode == KEYCODE_DEL && insertedChipList.isNotEmpty()) {
-                    val parent = chipEditText.parent as ChipGroup
-                    parent.removeViewAt(parent.childCount - 2)
+                if (event.action == ACTION_DOWN && event.keyCode == KEYCODE_DEL && insertedChipList.isNotEmpty() && text?.toString().isNullOrBlank()) {
+                    this@MaterialChipInput.inputChipGroup.removeViewAt(this@MaterialChipInput.inputChipGroup.childCount - 2)
 
                     val chip = insertedChipList.elementAt(insertedChipList.size - 1)
                     insertedChipList.remove(chip)
