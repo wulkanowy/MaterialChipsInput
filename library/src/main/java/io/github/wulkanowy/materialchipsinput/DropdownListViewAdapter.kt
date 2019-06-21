@@ -39,7 +39,7 @@ internal class DropdownListViewAdapter(
                 itemDropdownAvatar.setImageBitmap(createLetterBitmap(context, materialChipItem.title))
                 itemDropdownTitle.text = materialChipItem.title
                 itemDropdownSummary.text = materialChipItem.summary
-                itemView.setOnClickListener { chipInput.onItemInListSelected(materialChipItem) }
+                itemView.setOnClickListener { chipInput.addChipOnLastPosition(materialChipItem) }
             }
         }
     }

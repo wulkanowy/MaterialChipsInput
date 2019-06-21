@@ -10,17 +10,14 @@ import android.view.KeyEvent
 import android.view.KeyEvent.ACTION_DOWN
 import android.view.KeyEvent.KEYCODE_DEL
 import android.view.MotionEvent
-import android.view.View
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.inputmethod.EditorInfo.IME_FLAG_NO_EXTRACT_UI
-import android.widget.FrameLayout
 import androidx.core.view.setPadding
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import io.github.wulkanowy.materialchipsinput.util.convertDpToPixels
-import kotlinx.android.synthetic.main.input_chips.view.*
 
-class MaterialChipInput : FrameLayout {
+class MaterialChipInput : ChipGroup {
 
     private val dropdownListView = DropdownListView(context)
 
@@ -43,10 +40,8 @@ class MaterialChipInput : FrameLayout {
         }
 
     init {
-        View.inflate(context, R.layout.input_chips, this)
-
         with(chipEditText) {
-            layoutParams = ChipGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
+            layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
             minHeight = context.convertDpToPixels(32f).toInt()
             minWidth = context.convertDpToPixels(10f).toInt()
             hint = "Hint"
@@ -55,19 +50,13 @@ class MaterialChipInput : FrameLayout {
             inputType = TYPE_TEXT_VARIATION_FILTER or TYPE_TEXT_FLAG_NO_SUGGESTIONS or TYPE_CLASS_TEXT or TYPE_TEXT_FLAG_MULTI_LINE
             setPadding(0)
             setBackgroundResource(android.R.color.transparent)
+            post { requestFocus() }
 
             setOnKeyListener { _, _, event ->
                 if (event.action == ACTION_DOWN && event.keyCode == KEYCODE_DEL && insertedChipList.isNotEmpty() && text?.toString().isNullOrBlank()) {
-                    this@MaterialChipInput.inputChipGroup.removeViewAt(this@MaterialChipInput.inputChipGroup.childCount - 2)
-
-                    val chip = insertedChipList.elementAt(insertedChipList.size - 1)
-                    insertedChipList.remove(chip)
-                    if (insertedChipList.isEmpty()) {
-                        chipEditText.hint = "Hint"
-                    }
-                    onChipRemoved(chip)
-                }
-                false
+                    removeChipOnLastPosition()
+                    true
+                } else false
             }
 
             addTextChangedListener(object : TextWatcher {
@@ -75,36 +64,35 @@ class MaterialChipInput : FrameLayout {
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    onTextChanged(s)
+                    dropdownListView.processChangedText(text)
                 }
             })
 
         }
 
-        inputChipGroup.addView(chipEditText)
-        chipEditText.post { chipEditText.requestFocus() }
+        addView(chipEditText)
+        setChipSpacing(context.convertDpToPixels(8f).toInt())
     }
 
-    internal fun onItemInListSelected(chipItem: MaterialChipItem) {
+    internal fun addChipOnLastPosition(chipItem: MaterialChipItem) {
         insertedChipList.add(chipItem)
+        addView(Chip(context).apply { text = chipItem.title }, childCount - 1)
+        dropdownListView.dropdownListViewAdapter.removeItem(chipItem)
+
         with(chipEditText) {
             hint = null
             text = null
         }
-        inputChipGroup.addView(Chip(context).apply { text = chipItem.title }, inputChipGroup.childCount - 1)
-        onChipAdded(chipItem)
     }
 
-    private fun onChipAdded(chipItem: MaterialChipItem) {
-        dropdownListView.dropdownListViewAdapter.removeItem(chipItem)
-    }
+    internal fun removeChipOnLastPosition() {
+        val chipItem = insertedChipList.elementAt(insertedChipList.size - 1)
 
-    private fun onChipRemoved(chipItem: MaterialChipItem) {
+        insertedChipList.remove(chipItem)
+        removeViewAt(childCount - 2)
         dropdownListView.dropdownListViewAdapter.addItem(chipItem)
-    }
 
-    private fun onTextChanged(text: CharSequence?) {
-        dropdownListView.processChangedText(text)
+        if (insertedChipList.isEmpty()) chipEditText.hint = "Hint"
     }
 
     override fun dispatchKeyEventPreIme(event: KeyEvent): Boolean {
@@ -118,7 +106,7 @@ class MaterialChipInput : FrameLayout {
         chipEditText.getHitRect(editHitRect)
 
         val recyclerHitRect = Rect()
-        inputChipGroup.getHitRect(recyclerHitRect)
+        getHitRect(recyclerHitRect)
 
         val extendedHitRect = Rect(editHitRect.right, editHitRect.top, recyclerHitRect.right, editHitRect.bottom)
 
