@@ -52,8 +52,8 @@ class MaterialChipInput : ChipGroup {
             setBackgroundResource(android.R.color.transparent)
             post { requestFocus() }
 
-            setOnKeyListener { _, _, event ->
-                if (event.action == ACTION_DOWN && event.keyCode == KEYCODE_DEL && insertedChipList.isNotEmpty() && text?.toString().isNullOrBlank()) {
+            setOnKeyListener { _, keyCode, event ->
+                if (event.action == ACTION_DOWN && keyCode == KEYCODE_DEL && insertedChipList.isNotEmpty() && text?.toString().isNullOrBlank()) {
                     removeChipOnLastPosition()
                     true
                 } else false
