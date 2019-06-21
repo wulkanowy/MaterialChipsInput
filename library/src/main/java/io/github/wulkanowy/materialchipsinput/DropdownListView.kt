@@ -9,19 +9,20 @@ import android.os.Build.VERSION_CODES.JELLY_BEAN
 import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.KeyEvent.KEYCODE_BACK
-import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewTreeObserver
 import android.view.animation.AlphaAnimation
 import android.widget.RelativeLayout
+import android.widget.RelativeLayout.ALIGN_PARENT_LEFT
+import android.widget.RelativeLayout.ALIGN_PARENT_TOP
 import androidx.core.view.marginLeft
 import androidx.core.view.updateMargins
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.materialchipsinput.util.navBarHeight
-import kotlinx.android.synthetic.main.list_dropdown.view.*
 
-internal class DropdownListView : RelativeLayout {
+internal class DropdownListView : RecyclerView {
 
     lateinit var dropdownListViewAdapter: DropdownListViewAdapter
 
@@ -34,7 +35,6 @@ internal class DropdownListView : RelativeLayout {
     constructor(context: Context, attr: AttributeSet, defStyleAttr: Int) : super(context, attr, defStyleAttr)
 
     init {
-        View.inflate(context, R.layout.list_dropdown, this)
         visibility = GONE
     }
 
@@ -42,15 +42,13 @@ internal class DropdownListView : RelativeLayout {
         this.chipInput = chipInput
 
         dropdownListViewAdapter = DropdownListViewAdapter(chipList, context, chipInput)
-        with(listDropdownRecycler) {
-            layoutManager = LinearLayoutManager(context)
-            adapter = dropdownListViewAdapter
-        }
+        layoutManager = LinearLayoutManager(context)
+        adapter = dropdownListViewAdapter
 
         chipInput.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
 
             override fun onGlobalLayout() {
-                val layoutParams = LayoutParams(context.resources.displayMetrics.widthPixels, MATCH_PARENT)
+                val layoutParams = RelativeLayout.LayoutParams(context.resources.displayMetrics.widthPixels, MATCH_PARENT)
                         .apply {
                             addRule(ALIGN_PARENT_TOP)
                             addRule(ALIGN_PARENT_LEFT)
@@ -82,7 +80,7 @@ internal class DropdownListView : RelativeLayout {
         dropdownListViewAdapter.filterText(text) {
             if (it > 0) {
                 fadeIn()
-                listDropdownRecycler.smoothScrollToPosition(0)
+                smoothScrollToPosition(0)
             } else fadeOut()
         }
     }
