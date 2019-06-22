@@ -3,20 +3,17 @@ package io.github.wulkanowy.materialchipsinput
 
 import android.content.Context
 import android.graphics.Rect
-import android.os.Build.VERSION.SDK_INT
-import android.os.Build.VERSION_CODES.JELLY_BEAN
 import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.KeyEvent.KEYCODE_BACK
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
-import android.view.ViewTreeObserver
 import android.view.animation.AlphaAnimation
 import android.widget.LinearLayout
 import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import io.github.wulkanowy.materialchipsinput.util.convertDpToPixels
+import io.github.wulkanowy.materialchipsinput.util.dpToPx
 
 internal class DropdownListView : RecyclerView {
 
@@ -41,22 +38,9 @@ internal class DropdownListView : RecyclerView {
         layoutManager = LinearLayoutManager(context)
         adapter = dropdownListViewAdapter
 
-        chipInput.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-
-            override fun onGlobalLayout() {
-                val layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
-
-                chipInput.addView(this@DropdownListView, layoutParams)
-
-                if (SDK_INT < JELLY_BEAN) {
-                    @Suppress("DEPRECATION")
-                    chipInput.viewTreeObserver.removeGlobalOnLayoutListener(this)
-                } else {
-                    chipInput.viewTreeObserver.removeOnGlobalLayoutListener(this)
-                }
-            }
-
-        })
+        chipInput.post {
+            chipInput.addView(this, LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
+        }
     }
 
     fun processChangedText(text: CharSequence?) {
@@ -93,7 +77,7 @@ internal class DropdownListView : RecyclerView {
         }
 
         updateLayoutParams<LinearLayout.LayoutParams> {
-            val defaultHeight = context.convertDpToPixels(72f).toInt()
+            val defaultHeight = context.dpToPx(72f).toInt()
             val calculatedHeight = visibleRect.height() - (coordinators[1] + chipInput.height)
 
             height = if (calculatedHeight < defaultHeight) defaultHeight else calculatedHeight

@@ -17,7 +17,7 @@ import android.widget.LinearLayout
 import androidx.core.view.setPadding
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
-import io.github.wulkanowy.materialchipsinput.util.convertDpToPixels
+import io.github.wulkanowy.materialchipsinput.util.dpToPx
 
 class MaterialChipInput : LinearLayout {
 
@@ -45,16 +45,14 @@ class MaterialChipInput : LinearLayout {
 
     init {
         with(chipEditText) {
-            layoutParams = LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
-            minHeight = context.convertDpToPixels(32f).toInt()
-            minWidth = context.convertDpToPixels(10f).toInt()
+            minHeight = context.dpToPx(32f).toInt()
+            minWidth = context.dpToPx(10f).toInt()
             hint = "Hint"
             imeOptions = IME_FLAG_NO_EXTRACT_UI
             privateImeOptions = "nm"
             inputType = TYPE_TEXT_VARIATION_FILTER or TYPE_TEXT_FLAG_NO_SUGGESTIONS or TYPE_CLASS_TEXT or TYPE_TEXT_FLAG_MULTI_LINE
             setPadding(0)
             setBackgroundResource(android.R.color.transparent)
-            post { requestFocus() }
 
             setOnKeyListener { _, keyCode, event ->
                 if (event.action == ACTION_DOWN && keyCode == KEYCODE_DEL && insertedChipList.isNotEmpty() && text?.toString().isNullOrBlank()) {
@@ -77,8 +75,8 @@ class MaterialChipInput : LinearLayout {
         orientation = VERTICAL
         addView(chipGroup, LayoutParams(MATCH_PARENT, WRAP_CONTENT))
         with(chipGroup) {
-            addView(chipEditText)
-            setChipSpacing(context.convertDpToPixels(8f).toInt())
+            addView(chipEditText, ChipGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT))
+            setChipSpacing(context.dpToPx(8f).toInt())
         }
     }
 

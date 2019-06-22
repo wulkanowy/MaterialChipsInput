@@ -35,13 +35,13 @@ private val materialColors = listOf(
 fun createLetterBitmap(context: Context, text: String): Bitmap {
     val firstChar = (text.firstOrNull { it.isLetterOrDigit() } ?: "?").toString().toUpperCase()
     val bounds = Rect()
-    val dimension = context.convertDpToPixels(32f).toInt()
+    val dimension = context.dpToPx(32f).toInt()
     val paint = TextPaint().apply {
         typeface = TypefaceCompat.create(context, Typeface.create("sans-serif-light", NORMAL), NORMAL)
         color = WHITE
         textAlign = CENTER
         isAntiAlias = true
-        textSize = context.convertDpToPixels(17f)
+        textSize = context.dpToPx(17f)
         getTextBounds(firstChar, 0, 1, bounds)
     }
     return Bitmap.createBitmap(dimension, dimension, Bitmap.Config.ARGB_8888).applyCanvas {
