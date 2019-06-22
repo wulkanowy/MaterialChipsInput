@@ -2,25 +2,21 @@ package io.github.wulkanowy.materialchipsinput
 
 
 import android.content.Context
-import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.graphics.Rect
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.JELLY_BEAN
 import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.KeyEvent.KEYCODE_BACK
-import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.ViewTreeObserver
 import android.view.animation.AlphaAnimation
-import android.widget.RelativeLayout
-import android.widget.RelativeLayout.ALIGN_PARENT_LEFT
-import android.widget.RelativeLayout.ALIGN_PARENT_TOP
-import androidx.core.view.marginLeft
-import androidx.core.view.updateMargins
+import android.widget.LinearLayout
+import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import io.github.wulkanowy.materialchipsinput.util.navBarHeight
+import io.github.wulkanowy.materialchipsinput.util.convertDpToPixels
 
 internal class DropdownListView : RecyclerView {
 
@@ -48,17 +44,9 @@ internal class DropdownListView : RecyclerView {
         chipInput.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
 
             override fun onGlobalLayout() {
-                val layoutParams = RelativeLayout.LayoutParams(context.resources.displayMetrics.widthPixels, MATCH_PARENT)
-                        .apply {
-                            addRule(ALIGN_PARENT_TOP)
-                            addRule(ALIGN_PARENT_LEFT)
+                val layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
 
-                            if (context.resources.configuration.orientation == ORIENTATION_PORTRAIT) {
-                                bottomMargin = context.navBarHeight
-                            }
-                        }
-
-                (chipInput.rootView as ViewGroup).addView(this@DropdownListView, layoutParams)
+                chipInput.addView(this@DropdownListView, layoutParams)
 
                 if (SDK_INT < JELLY_BEAN) {
                     @Suppress("DEPRECATION")
@@ -95,20 +83,24 @@ internal class DropdownListView : RecyclerView {
     private fun fadeIn() {
         if (visibility == VISIBLE) return
 
-        val rect = Rect()
-        rootView.getWindowVisibleDisplayFrame(rect)
+        val visibleRect = Rect().apply {
+            rootView.getWindowVisibleDisplayFrame(this)
+            top = 0
+        }
 
-        val coordinators = IntArray(2)
-        chipInput.getLocationInWindow(coordinators)
+        val coordinators = IntArray(2).apply {
+            chipInput.getLocationOnScreen(this)
+        }
 
-        (layoutParams as MarginLayoutParams).updateMargins(
-                top = coordinators[1] + chipInput.height,
-                bottom = rootView.height - rect.bottom,
-                left = if (rect.left > 0) rect.left else marginLeft
-        )
-        requestLayout()
-        startAnimation(AlphaAnimation(0.0f, 1.0f).apply { duration = 200 })
+        updateLayoutParams<LinearLayout.LayoutParams> {
+            val defaultHeight = context.convertDpToPixels(72f).toInt()
+            val calculatedHeight = visibleRect.height() - (coordinators[1] + chipInput.height)
+
+            height = if (calculatedHeight < defaultHeight) defaultHeight else calculatedHeight
+        }
+
         visibility = VISIBLE
+        startAnimation(AlphaAnimation(0.0f, 1.0f).apply { duration = 200 })
     }
 
     private fun fadeOut() {

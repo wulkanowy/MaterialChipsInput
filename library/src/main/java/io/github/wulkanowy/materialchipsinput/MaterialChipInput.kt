@@ -10,18 +10,22 @@ import android.view.KeyEvent
 import android.view.KeyEvent.ACTION_DOWN
 import android.view.KeyEvent.KEYCODE_DEL
 import android.view.MotionEvent
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.inputmethod.EditorInfo.IME_FLAG_NO_EXTRACT_UI
+import android.widget.LinearLayout
 import androidx.core.view.setPadding
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import io.github.wulkanowy.materialchipsinput.util.convertDpToPixels
 
-class MaterialChipInput : ChipGroup {
+class MaterialChipInput : LinearLayout {
 
     private val dropdownListView = DropdownListView(context)
 
-    private var chipEditText = MaterialChipEditText(context)
+    private val chipEditText = MaterialChipEditText(context)
+
+    private val chipGroup = ChipGroup(context)
 
     private val insertedChipList = mutableListOf<MaterialChipItem>()
 
@@ -70,13 +74,17 @@ class MaterialChipInput : ChipGroup {
 
         }
 
-        addView(chipEditText)
-        setChipSpacing(context.convertDpToPixels(8f).toInt())
+        orientation = VERTICAL
+        addView(chipGroup, LayoutParams(MATCH_PARENT, WRAP_CONTENT))
+        with(chipGroup) {
+            addView(chipEditText)
+            setChipSpacing(context.convertDpToPixels(8f).toInt())
+        }
     }
 
     internal fun addChipOnLastPosition(chipItem: MaterialChipItem) {
         insertedChipList.add(chipItem)
-        addView(Chip(context).apply { text = chipItem.title }, childCount - 1)
+        chipGroup.addView(Chip(context).apply { text = chipItem.title }, chipGroup.childCount - 1)
         dropdownListView.dropdownListViewAdapter.removeItem(chipItem)
 
         with(chipEditText) {
@@ -89,7 +97,7 @@ class MaterialChipInput : ChipGroup {
         val chipItem = insertedChipList.elementAt(insertedChipList.size - 1)
 
         insertedChipList.remove(chipItem)
-        removeViewAt(childCount - 2)
+        chipGroup.removeViewAt(chipGroup.childCount - 2)
         dropdownListView.dropdownListViewAdapter.addItem(chipItem)
 
         if (insertedChipList.isEmpty()) chipEditText.hint = "Hint"
@@ -105,16 +113,14 @@ class MaterialChipInput : ChipGroup {
         val editHitRect = Rect()
         chipEditText.getHitRect(editHitRect)
 
-        val recyclerHitRect = Rect()
-        getHitRect(recyclerHitRect)
+        val chipGroupHitRect = Rect()
+        chipGroup.getHitRect(chipGroupHitRect)
 
-        val extendedHitRect = Rect(editHitRect.right, editHitRect.top, recyclerHitRect.right, editHitRect.bottom)
+        val extendedHitRect = Rect(editHitRect.right, editHitRect.top, chipGroupHitRect.right, editHitRect.bottom)
 
         event?.let {
             if (extendedHitRect.contains(it.x.toInt(), it.y.toInt())) {
-                chipEditText.apply {
-                    isHandled = chipEditText.dispatchTouchEvent(it)
-                }
+                isHandled = chipEditText.dispatchTouchEvent(it)
             }
         }
         return if (isHandled) true else super.dispatchTouchEvent(event)
