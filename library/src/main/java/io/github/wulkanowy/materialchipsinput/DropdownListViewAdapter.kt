@@ -12,22 +12,19 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_dropdown_list.*
 
 internal class DropdownListViewAdapter(
-        originalChipList: List<MaterialChipItem>,
         private val context: Context,
         private val chipInput: MaterialChipInput)
     : RecyclerView.Adapter<DropdownListViewAdapter.ItemViewHolder>() {
 
-    private val currentChipList = originalChipList.toMutableList()
+    private val originalItemList = mutableListOf<MaterialChipItem>()
 
-    private val filteredChipList = originalChipList.toMutableList()
+    private val currentItemList = mutableListOf<MaterialChipItem>()
 
-    private var chipFilter: ChipFilter
+    private val filteredItemList = mutableListOf<MaterialChipItem>()
 
-    init {
-        chipFilter = ChipFilter(this)
-    }
+    private var chipFilter = ItemFilter(this)
 
-    override fun getItemCount() = filteredChipList.size
+    override fun getItemCount() = filteredItemList.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
         return ItemViewHolder(LayoutInflater.from(context).inflate(R.layout.item_dropdown_list, parent, false))
@@ -35,7 +32,7 @@ internal class DropdownListViewAdapter(
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         with(holder) {
-            filteredChipList.getOrNull(position)?.let { materialChipItem ->
+            filteredItemList.getOrNull(position)?.let { materialChipItem ->
                 itemDropdownAvatar.setImageBitmap(createLetterBitmap(context, materialChipItem.title))
                 itemDropdownTitle.text = materialChipItem.title
                 itemDropdownSummary.text = materialChipItem.summary
@@ -44,26 +41,28 @@ internal class DropdownListViewAdapter(
         }
     }
 
+    fun updateDataSet(items: List<MaterialChipItem>) {
+        with(originalItemList) {
+            clear()
+            addAll(items)
+        }
+
+        with(currentItemList) {
+            clear()
+            addAll(items)
+        }
+    }
+
     fun filterText(text: CharSequence, onComplete: (filteredCount: Int) -> Unit) {
         chipFilter.filter(text, onComplete)
     }
 
-    fun removeItem(chipItem: MaterialChipItem) {
-        currentChipList.remove(chipItem)
-        with(filteredChipList) {
-            clear()
-            addAll(currentChipList)
-        }
-        notifyDataSetChanged()
+    fun removeItemFromSet(chipItem: MaterialChipItem) {
+        currentItemList.remove(chipItem)
     }
 
-    fun addItem(chipItem: MaterialChipItem) {
-        currentChipList.add(chipItem)
-        with(filteredChipList) {
-            clear()
-            addAll(currentChipList)
-        }
-        notifyDataSetChanged()
+    fun addItemToSet(chipItem: MaterialChipItem) {
+        currentItemList.add(chipItem)
     }
 
     class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view), LayoutContainer {
@@ -71,10 +70,10 @@ internal class DropdownListViewAdapter(
         override val containerView get() = itemView
     }
 
-    class ChipFilter(private val adapter: DropdownListViewAdapter) : Filter() {
+    class ItemFilter(private val adapter: DropdownListViewAdapter) : Filter() {
 
         override fun performFiltering(constraint: CharSequence): FilterResults {
-            val originalList = adapter.currentChipList
+            val originalList = adapter.currentItemList
             val filteredList = mutableListOf<MaterialChipItem>()
 
             if (constraint.isBlank()) {
@@ -97,8 +96,8 @@ internal class DropdownListViewAdapter(
         @Suppress("UNCHECKED_CAST")
         override fun publishResults(constraint: CharSequence, results: FilterResults) {
             with(adapter) {
-                filteredChipList.clear()
-                filteredChipList.addAll(results.values as List<MaterialChipItem>)
+                filteredItemList.clear()
+                filteredItemList.addAll(results.values as List<MaterialChipItem>)
                 notifyDataSetChanged()
             }
         }

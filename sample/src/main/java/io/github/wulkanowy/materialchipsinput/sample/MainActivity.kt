@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     contactsQuery.close()
-                    mainChipsInput.itemList = contactList
+                    mainChipsInput.itemList = contactList ?: emptyList()
                 })
     }
 
