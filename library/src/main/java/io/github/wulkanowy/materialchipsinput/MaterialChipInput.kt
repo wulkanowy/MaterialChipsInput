@@ -2,9 +2,7 @@ package io.github.wulkanowy.materialchipsinput
 
 import android.content.Context
 import android.graphics.Rect
-import android.text.Editable
 import android.text.InputType.*
-import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.KeyEvent.*
@@ -14,6 +12,7 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.inputmethod.EditorInfo.IME_FLAG_NO_EXTRACT_UI
 import android.widget.LinearLayout
 import androidx.core.view.setPadding
+import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
@@ -21,7 +20,7 @@ import io.github.wulkanowy.materialchipsinput.util.dpToPx
 
 class MaterialChipInput : LinearLayout {
 
-    private val dropdownListViewAdapter = DropdownListViewAdapter(context, this)
+    private val dropdownListViewAdapter = DropdownListViewAdapter(context)
 
     private val dropdownListView = DropdownListView(context)
 
@@ -53,7 +52,23 @@ class MaterialChipInput : LinearLayout {
         addView(dropdownListView, LayoutParams(MATCH_PARENT, WRAP_CONTENT))
     }
 
-    internal fun addChipOnLastPosition(chipItem: MaterialChipItem) {
+    private fun processChangedText(text: CharSequence?) {
+        if (text.isNullOrBlank()) {
+            dropdownListView.fadeOut()
+            return
+        }
+
+        dropdownListViewAdapter.filterText(text) {
+            with(dropdownListView) {
+                if (it > 0) {
+                    fadeIn()
+                    smoothScrollToPosition(0)
+                } else fadeOut()
+            }
+        }
+    }
+
+    private fun addChipOnLastPosition(chipItem: MaterialChipItem) {
         insertedChipList.add(chipItem)
         chipGroup.addView(Chip(context).apply { text = chipItem.title }, chipGroup.childCount - 1)
         dropdownListViewAdapter.removeItemFromSet(chipItem)
@@ -64,7 +79,7 @@ class MaterialChipInput : LinearLayout {
         }
     }
 
-    internal fun removeChipOnLastPosition() {
+    private fun removeChipOnLastPosition() {
         val chipItem = insertedChipList.elementAt(insertedChipList.size - 1)
 
         insertedChipList.remove(chipItem)
@@ -72,6 +87,44 @@ class MaterialChipInput : LinearLayout {
         dropdownListViewAdapter.addItemToSet(chipItem)
 
         if (insertedChipList.isEmpty()) chipEditText.hint = "Hint"
+    }
+
+    private fun initChipGroup() {
+        with(chipGroup) {
+            addView(chipEditText, ChipGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT))
+            setChipSpacing(context.dpToPx(8f).toInt())
+        }
+    }
+
+    private fun initDropdownListView() {
+        with(dropdownListView) {
+            layoutManager = LinearLayoutManager(context)
+            adapter = dropdownListViewAdapter
+            visibility = GONE
+            setHasFixedSize(true)
+            dropdownListViewAdapter.onItemsSelectedListener = ::addChipOnLastPosition
+        }
+    }
+
+    private fun initMaterialChipEditText() {
+        with(chipEditText) {
+            minHeight = context.dpToPx(32f).toInt()
+            minWidth = context.dpToPx(10f).toInt()
+            hint = "Hint"
+            imeOptions = IME_FLAG_NO_EXTRACT_UI
+            privateImeOptions = "nm"
+            inputType = TYPE_TEXT_VARIATION_FILTER or TYPE_TEXT_FLAG_NO_SUGGESTIONS or TYPE_CLASS_TEXT or TYPE_TEXT_FLAG_MULTI_LINE
+            setPadding(0)
+            setBackgroundResource(android.R.color.transparent)
+            doOnTextChanged { text, _, _, _ -> processChangedText(text) }
+
+            setOnKeyListener { _, keyCode, event ->
+                if (event.action == ACTION_DOWN && keyCode == KEYCODE_DEL && insertedChipList.isNotEmpty() && text?.toString().isNullOrBlank()) {
+                    removeChipOnLastPosition()
+                    true
+                } else false
+            }
+        }
     }
 
     override fun dispatchKeyEventPreIme(event: KeyEvent): Boolean {
@@ -97,63 +150,5 @@ class MaterialChipInput : LinearLayout {
             }
         }
         return if (isHandled) true else super.dispatchTouchEvent(event)
-    }
-
-    private fun initMaterialChipEditText() {
-        with(chipEditText) {
-            minHeight = context.dpToPx(32f).toInt()
-            minWidth = context.dpToPx(10f).toInt()
-            hint = "Hint"
-            imeOptions = IME_FLAG_NO_EXTRACT_UI
-            privateImeOptions = "nm"
-            inputType = TYPE_TEXT_VARIATION_FILTER or TYPE_TEXT_FLAG_NO_SUGGESTIONS or TYPE_CLASS_TEXT or TYPE_TEXT_FLAG_MULTI_LINE
-            setPadding(0)
-            setBackgroundResource(android.R.color.transparent)
-
-            setOnKeyListener { _, keyCode, event ->
-                if (event.action == ACTION_DOWN && keyCode == KEYCODE_DEL && insertedChipList.isNotEmpty() && text?.toString().isNullOrBlank()) {
-                    removeChipOnLastPosition()
-                    true
-                } else false
-            }
-
-            addTextChangedListener(object : TextWatcher {
-                override fun afterTextChanged(s: Editable?) {}
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    if (s.isNullOrBlank()) {
-                        dropdownListView.fadeOut()
-                        return
-                    }
-
-                    dropdownListViewAdapter.filterText(s) {
-                        with(dropdownListView) {
-                            if (it > 0) {
-                                fadeIn()
-                                smoothScrollToPosition(0)
-                            } else fadeOut()
-                        }
-                    }
-                }
-            })
-
-        }
-    }
-
-    private fun initChipGroup() {
-        with(chipGroup) {
-            addView(chipEditText, ChipGroup.LayoutParams(WRAP_CONTENT, WRAP_CONTENT))
-            setChipSpacing(context.dpToPx(8f).toInt())
-        }
-    }
-
-    private fun initDropdownListView() {
-        with(dropdownListView) {
-            layoutManager = LinearLayoutManager(context)
-            adapter = dropdownListViewAdapter
-            setHasFixedSize(true)
-            visibility = GONE
-        }
     }
 }

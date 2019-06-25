@@ -11,10 +11,10 @@ import io.github.wulkanowy.materialchipsinput.util.createLetterBitmap
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_dropdown_list.*
 
-internal class DropdownListViewAdapter(
-        private val context: Context,
-        private val chipInput: MaterialChipInput)
+internal class DropdownListViewAdapter(private val context: Context)
     : RecyclerView.Adapter<DropdownListViewAdapter.ItemViewHolder>() {
+
+    var onItemsSelectedListener: (item: MaterialChipItem) -> Unit = {}
 
     private val originalItemList = mutableListOf<MaterialChipItem>()
 
@@ -36,7 +36,7 @@ internal class DropdownListViewAdapter(
                 itemDropdownAvatar.setImageBitmap(createLetterBitmap(context, materialChipItem.title))
                 itemDropdownTitle.text = materialChipItem.title
                 itemDropdownSummary.text = materialChipItem.summary
-                itemView.setOnClickListener { chipInput.addChipOnLastPosition(materialChipItem) }
+                itemView.setOnClickListener { onItemsSelectedListener(materialChipItem) }
             }
         }
     }
