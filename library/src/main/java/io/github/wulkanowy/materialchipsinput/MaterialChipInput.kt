@@ -20,20 +20,6 @@ import io.github.wulkanowy.materialchipsinput.util.dpToPx
 
 class MaterialChipInput : LinearLayout {
 
-    var onChipAddListener: (chip: MaterialChipItem) -> Unit = {}
-
-    var onChipRemoveListener: (chip: MaterialChipItem) -> Unit = {}
-
-    var onTextChangeListener: (text: String) -> Unit = {}
-
-    var itemList: List<MaterialChipItem> = emptyList()
-        set(list) {
-            field = list
-            dropdownListViewAdapter.updateDataSet(list)
-        }
-
-    val insertedChipList: List<MaterialChipItem> get() = _insertedChipList
-
     private val _insertedChipList = mutableListOf<MaterialChipItem>()
 
     private val dropdownListViewAdapter = DropdownListViewAdapter(context)
@@ -43,6 +29,22 @@ class MaterialChipInput : LinearLayout {
     private val chipEditText = MaterialChipEditText(context)
 
     private val chipGroup = ChipGroup(context)
+
+    var hint: String? = null
+
+    var itemList: List<MaterialChipItem> = emptyList()
+        set(list) {
+            field = list
+            dropdownListViewAdapter.updateDataSet(list)
+        }
+
+    val insertedChipList: List<MaterialChipItem> get() = _insertedChipList
+
+    var onChipAddListener: (chip: MaterialChipItem) -> Unit = {}
+
+    var onChipRemoveListener: (chip: MaterialChipItem) -> Unit = {}
+
+    var onTextChangeListener: (text: String) -> Unit = {}
 
     constructor(context: Context) : super(context)
 
@@ -98,7 +100,7 @@ class MaterialChipInput : LinearLayout {
         dropdownListViewAdapter.addItemToSet(chipItem)
         onChipRemoveListener(chipItem)
 
-        if (_insertedChipList.isEmpty()) chipEditText.hint = "Hint"
+        if (_insertedChipList.isEmpty()) chipEditText.hint = hint
     }
 
     private fun initChipGroup() {
@@ -122,7 +124,7 @@ class MaterialChipInput : LinearLayout {
         with(chipEditText) {
             minHeight = context.dpToPx(32f).toInt()
             minWidth = context.dpToPx(10f).toInt()
-            hint = "Hint"
+            hint = this@MaterialChipInput.hint
             imeOptions = IME_FLAG_NO_EXTRACT_UI
             privateImeOptions = "nm"
             inputType = TYPE_TEXT_VARIATION_FILTER or TYPE_TEXT_FLAG_NO_SUGGESTIONS or TYPE_CLASS_TEXT or TYPE_TEXT_FLAG_MULTI_LINE
