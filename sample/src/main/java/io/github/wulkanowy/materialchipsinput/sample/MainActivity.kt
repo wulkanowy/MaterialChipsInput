@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity() {
 
                     contactsQuery.close()
                     mainChipsInput.itemList = contactList ?: emptyList()
+                    mainChipsInput.onTextChangeListener = { scroll.smoothScrollTo(0, scroll.bottom) }
                 })
     }
 

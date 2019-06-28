@@ -10,6 +10,7 @@ import android.view.MotionEvent
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.inputmethod.EditorInfo.IME_FLAG_NO_EXTRACT_UI
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.core.view.setPadding
 import androidx.core.widget.doOnTextChanged
@@ -59,7 +60,12 @@ class MaterialChipInput : LinearLayout {
 
         orientation = VERTICAL
         addView(chipGroup, LayoutParams(MATCH_PARENT, WRAP_CONTENT))
-        addView(dropdownListView, LayoutParams(MATCH_PARENT, WRAP_CONTENT))
+
+        post {
+            val root = this.rootView
+            val parentOfParent = this.parent.parent as FrameLayout
+            parentOfParent.addView(dropdownListView, FrameLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
+        }
     }
 
     private fun processChangedText(text: CharSequence?) {
@@ -73,7 +79,7 @@ class MaterialChipInput : LinearLayout {
         dropdownListViewAdapter.filterText(text) {
             with(dropdownListView) {
                 if (it > 0) {
-                    fadeIn()
+                    fadeIn(this@MaterialChipInput)
                     smoothScrollToPosition(0)
                 } else fadeOut()
             }

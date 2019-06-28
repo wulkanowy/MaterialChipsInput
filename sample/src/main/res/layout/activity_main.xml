@@ -7,24 +7,32 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
+        android:id="@+id/scroll"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <FrameLayout
+            android:id="@+id/container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-            <io.github.wulkanowy.materialchipsinput.MaterialChipInput
-                android:id="@+id/mainChipsInput"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="58dp" />
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                tools:ignore="UselessParent">
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="58dp"
-                android:background="@color/colorPrimary"
-                tools:ignore="Autofill,LabelFor,TextFields" />
-        </LinearLayout>
+                <io.github.wulkanowy.materialchipsinput.MaterialChipInput
+                    android:id="@+id/mainChipsInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="58dp" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="144dp"
+                    android:background="@color/colorPrimary"
+                    tools:ignore="Autofill,LabelFor,TextFields" />
+            </LinearLayout>
+        </FrameLayout>
     </androidx.core.widget.NestedScrollView>
 </LinearLayout>

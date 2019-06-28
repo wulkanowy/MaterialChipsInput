@@ -5,7 +5,7 @@ import android.content.Context
 import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.animation.AlphaAnimation
-import android.widget.LinearLayout
+import android.widget.FrameLayout
 import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
 import io.github.wulkanowy.materialchipsinput.util.dpToPx
@@ -18,10 +18,8 @@ internal class DropdownListView : RecyclerView {
 
     constructor(context: Context, attr: AttributeSet, defStyleAttr: Int) : super(context, attr, defStyleAttr)
 
-    fun fadeIn() {
-        if (visibility == VISIBLE || parent !is MaterialChipInput) return
-
-        val chipInput = parent as MaterialChipInput
+    fun fadeIn(chipInput: MaterialChipInput) {
+        if (visibility == VISIBLE) return
 
         val visibleRect = Rect().apply {
             rootView.getWindowVisibleDisplayFrame(this)
@@ -32,11 +30,12 @@ internal class DropdownListView : RecyclerView {
             chipInput.getLocationOnScreen(this)
         }
 
-        updateLayoutParams<LinearLayout.LayoutParams> {
-            val defaultHeight = context.dpToPx(72f).toInt()
+        updateLayoutParams<FrameLayout.LayoutParams> {
+            val defaultHeight = context.dpToPx(144f).toInt()
             val calculatedHeight = visibleRect.height() - (coordinators[1] + chipInput.height)
 
             height = if (calculatedHeight < defaultHeight) defaultHeight else calculatedHeight
+            topMargin = chipInput.height
         }
 
         visibility = VISIBLE
