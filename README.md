@@ -6,7 +6,7 @@ Fork of an unsupported library which makes working with chips easier
 
 ```groovy
 repositories {
-    maven { url 'https://jitpack.io' }
+  maven { url 'https://jitpack.io' }
 }
 ```
 
@@ -18,7 +18,7 @@ dependencies {
 
 ## Built With
 
-* [Material Componets](https://github.com/material-components/material-components-android) - Modular and customizable Material Design UI components for Android
+* [Material Componets](https://github.com/material-components/material-components-android)
 
 ## Contributing
 
@@ -26,4 +26,4 @@ Please contribute to the project either by creating a PR or submitting an issue 
 
 ## License
 
-This project is licensed under the Apache License 2.0 - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details
