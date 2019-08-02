@@ -6,8 +6,8 @@
     android:orientation="vertical">
 
     <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
         android:id="@+id/scroll"
+        android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <FrameLayout
@@ -31,7 +31,8 @@
                     android:id="@+id/mainChipsInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="58dp" />
+                    android:paddingTop="13dp"
+                    android:paddingBottom="13dp" />
 
                 <EditText
                     android:layout_width="match_parent"

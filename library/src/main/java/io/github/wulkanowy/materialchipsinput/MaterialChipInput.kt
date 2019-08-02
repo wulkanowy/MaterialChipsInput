@@ -72,6 +72,10 @@ class MaterialChipInput : LinearLayout {
         }
     }
 
+    fun hideDropdownList() {
+        dropdownListView.fadeOut()
+    }
+
     private fun processChangedText(text: CharSequence?) {
         onTextChangeListener(text?.toString().orEmpty())
 
