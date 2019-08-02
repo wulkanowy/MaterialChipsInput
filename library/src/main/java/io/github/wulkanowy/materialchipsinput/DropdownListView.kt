@@ -35,7 +35,7 @@ internal class DropdownListView : RecyclerView {
             val calculatedHeight = visibleRect.height() - (coordinators[1] + chipInput.height)
 
             height = if (calculatedHeight < defaultHeight) defaultHeight else calculatedHeight
-            topMargin = chipInput.height
+            topMargin = chipInput.height + chipInput.top
         }
 
         visibility = VISIBLE
