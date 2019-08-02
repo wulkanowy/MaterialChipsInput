@@ -2,10 +2,15 @@ package io.github.wulkanowy.materialchipsinput
 
 import android.content.Context
 import android.graphics.Rect
-import android.text.InputType.*
+import android.text.InputType.TYPE_CLASS_TEXT
+import android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE
+import android.text.InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
+import android.text.InputType.TYPE_TEXT_VARIATION_FILTER
 import android.util.AttributeSet
 import android.view.KeyEvent
-import android.view.KeyEvent.*
+import android.view.KeyEvent.ACTION_DOWN
+import android.view.KeyEvent.KEYCODE_BACK
+import android.view.KeyEvent.KEYCODE_DEL
 import android.view.MotionEvent
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
@@ -62,9 +67,8 @@ class MaterialChipInput : LinearLayout {
         addView(chipGroup, LayoutParams(MATCH_PARENT, WRAP_CONTENT))
 
         post {
-            val root = this.rootView
-            val parentOfParent = this.parent.parent as FrameLayout
-            parentOfParent.addView(dropdownListView, FrameLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
+            val listContainer = this.parent.parent as? FrameLayout ?: throw IllegalArgumentException("MaterialChipsInput must be a child of FrameLayout")
+            listContainer.addView(dropdownListView, FrameLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
         }
     }
 
