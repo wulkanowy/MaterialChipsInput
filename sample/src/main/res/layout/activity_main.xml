@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <androidx.core.widget.NestedScrollView
+    <io.github.wulkanowy.materialchipsinput.ConsumedNestedScrollView
         android:id="@+id/scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -41,5 +41,5 @@
                     tools:ignore="Autofill,LabelFor,TextFields" />
             </LinearLayout>
         </FrameLayout>
-    </androidx.core.widget.NestedScrollView>
+    </io.github.wulkanowy.materialchipsinput.ConsumedNestedScrollView>
 </LinearLayout>
