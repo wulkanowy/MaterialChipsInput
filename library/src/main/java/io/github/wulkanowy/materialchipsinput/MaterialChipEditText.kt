@@ -3,7 +3,9 @@ package io.github.wulkanowy.materialchipsinput
 import android.content.Context
 import android.util.AttributeSet
 import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.EditorInfo.*
+import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
+import android.view.inputmethod.EditorInfo.IME_FLAG_NO_ENTER_ACTION
+import android.view.inputmethod.EditorInfo.IME_MASK_ACTION
 import android.view.inputmethod.InputConnection
 import androidx.appcompat.widget.AppCompatEditText
 

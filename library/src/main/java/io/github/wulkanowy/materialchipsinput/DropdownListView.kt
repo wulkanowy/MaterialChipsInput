@@ -1,6 +1,5 @@
 package io.github.wulkanowy.materialchipsinput
 
-
 import android.content.Context
 import android.graphics.Rect
 import android.util.AttributeSet

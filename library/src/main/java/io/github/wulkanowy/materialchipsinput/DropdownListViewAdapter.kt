@@ -1,6 +1,5 @@
 package io.github.wulkanowy.materialchipsinput
 
-
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -11,8 +10,8 @@ import io.github.wulkanowy.materialchipsinput.util.createLetterBitmap
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_dropdown_list.*
 
-internal class DropdownListViewAdapter(private val context: Context)
-    : RecyclerView.Adapter<DropdownListViewAdapter.ItemViewHolder>() {
+internal class DropdownListViewAdapter(private val context: Context) :
+    RecyclerView.Adapter<DropdownListViewAdapter.ItemViewHolder>() {
 
     var onItemsSelectedListener: (item: MaterialChipItem) -> Unit = {}
 

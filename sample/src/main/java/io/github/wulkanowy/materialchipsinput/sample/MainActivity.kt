@@ -24,24 +24,24 @@ class MainActivity : AppCompatActivity() {
         contactList = mutableListOf()
 
         disposable.add(RxPermissions(this)
-                .request(READ_CONTACTS)
-                .subscribeBy {
-                    if (!it || contactList?.isNotEmpty() == true) return@subscribeBy
+            .request(READ_CONTACTS)
+            .subscribeBy {
+                if (!it || contactList?.isNotEmpty() == true) return@subscribeBy
 
-                    val contactsQuery = ContentResolverCompat.query(contentResolver, CONTENT_URI, null, null, null, null, null)
-                            ?: return@subscribeBy
+                val contactsQuery = ContentResolverCompat.query(contentResolver, CONTENT_URI, null, null, null, null, null)
+                    ?: return@subscribeBy
 
-                    while (contactsQuery.moveToNext()) {
-                        contactList?.add(ChipItem(
-                                title = contactsQuery.run { getString(getColumnIndex(DISPLAY_NAME)) },
-                                summary = ""
-                        ))
-                    }
+                while (contactsQuery.moveToNext()) {
+                    contactList?.add(ChipItem(
+                        title = contactsQuery.run { getString(getColumnIndex(DISPLAY_NAME)) },
+                        summary = ""
+                    ))
+                }
 
-                    contactsQuery.close()
-                    mainChipsInput.itemList = contactList ?: emptyList()
-                    mainChipsInput.onTextChangeListener = { scroll.smoothScrollTo(0, scroll.bottom) }
-                })
+                contactsQuery.close()
+                mainChipsInput.itemList = contactList ?: emptyList()
+                mainChipsInput.onTextChangeListener = { scroll.smoothScrollTo(0, scroll.bottom) }
+            })
     }
 
     override fun onDestroy() {
