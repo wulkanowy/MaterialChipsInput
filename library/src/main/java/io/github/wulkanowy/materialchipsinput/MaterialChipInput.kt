@@ -164,16 +164,16 @@ class MaterialChipInput : LinearLayout {
 
     override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
         var isHandled = false
-        val editHitRect = Rect()
-        chipEditText.getHitRect(editHitRect)
+        val editVisibleRect = Rect()
+        chipEditText.getGlobalVisibleRect(editVisibleRect)
 
-        val chipGroupHitRect = Rect()
-        chipGroup.getHitRect(chipGroupHitRect)
+        val chipGroupVisibleRect = Rect()
+        chipGroup.getGlobalVisibleRect(chipGroupVisibleRect)
 
-        val extendedHitRect = Rect(editHitRect.right, editHitRect.top, chipGroupHitRect.right, editHitRect.bottom)
+        val extendedHitRect = Rect(editVisibleRect.right, editVisibleRect.top, chipGroupVisibleRect.right, editVisibleRect.bottom)
 
         event?.let {
-            if (extendedHitRect.contains(it.x.toInt(), it.y.toInt())) {
+            if (extendedHitRect.contains(it.rawX.toInt(), it.rawY.toInt())) {
                 isHandled = chipEditText.dispatchTouchEvent(it)
             }
         }
