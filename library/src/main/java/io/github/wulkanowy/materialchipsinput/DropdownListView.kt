@@ -30,7 +30,7 @@ internal class DropdownListView : RecyclerView {
         }
 
         updateLayoutParams<FrameLayout.LayoutParams> {
-            val defaultHeight = context.dpToPx(144f).toInt()
+            val defaultHeight = context.dpToPx(116f).toInt()
             val calculatedHeight = visibleRect.height() - (coordinators[1] + chipInput.height)
 
             height = if (calculatedHeight < defaultHeight) defaultHeight else calculatedHeight
