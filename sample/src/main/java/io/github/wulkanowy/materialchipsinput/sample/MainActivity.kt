@@ -12,14 +12,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val list = mutableListOf<ChipItem>()
+        val randomNumbers = mutableListOf<ChipItem>()
 
         repeat(30) {
-            list.add(ChipItem(Random.nextInt().toString(), Random.nextInt().toString()))
+            randomNumbers.add(ChipItem(Random.nextInt().toString(), Random.nextInt().toString()))
         }
 
-        mainChipsInput.itemList = list
-        mainChipsInput.onTextChangeListener = { scroll.smoothScrollTo(0, scroll.bottom) }
+        with(mainChipsInput) {
+            itemList = randomNumbers
+            onTextChangeListener = { scrollContainer.scrollTo(0, scrollContainer.bottom) }
+        }
     }
 
     data class ChipItem(override val title: String, override val summary: String) : MaterialChipItem
