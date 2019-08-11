@@ -22,9 +22,11 @@
                 tools:ignore="UselessParent">
 
                 <EditText
+                    android:id="@+id/mockTextView1"
                     android:layout_width="match_parent"
-                    android:layout_height="144dp"
+                    android:layout_height="116dp"
                     android:background="@color/colorPrimary"
+                    android:imeOptions="flagNoExtractUi"
                     tools:ignore="Autofill,LabelFor,TextFields" />
 
                 <io.github.wulkanowy.materialchipsinput.MaterialChipInput
@@ -35,9 +37,11 @@
                     android:paddingBottom="13dp" />
 
                 <EditText
+                    android:id="@+id/mockTextView2"
                     android:layout_width="match_parent"
                     android:layout_height="116dp"
                     android:background="@color/colorPrimary"
+                    android:imeOptions="flagNoExtractUi"
                     tools:ignore="Autofill,LabelFor,TextFields" />
             </LinearLayout>
         </FrameLayout>
