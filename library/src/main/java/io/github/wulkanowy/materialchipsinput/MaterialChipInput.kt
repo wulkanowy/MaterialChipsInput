@@ -52,6 +52,8 @@ class MaterialChipInput : LinearLayout {
 
     var onTextChangeListener: (text: String) -> Unit = {}
 
+    val isDropdownListVisible get() = dropdownListView.visibility == VISIBLE
+
     constructor(context: Context) : super(context)
 
     constructor(context: Context, attr: AttributeSet) : super(context, attr)
