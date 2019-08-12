@@ -3,7 +3,6 @@ package io.github.wulkanowy.materialchipsinput
 import android.content.Context
 import android.graphics.Rect
 import android.util.AttributeSet
-import android.view.animation.AlphaAnimation
 import android.widget.FrameLayout
 import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
@@ -36,15 +35,12 @@ internal class DropdownListView : RecyclerView {
             height = if (calculatedHeight < defaultHeight) defaultHeight else calculatedHeight
             topMargin = chipInput.height + chipInput.top
         }
-
         visibility = VISIBLE
-        startAnimation(AlphaAnimation(0.0f, 1.0f).apply { duration = 200 })
     }
 
     fun fadeOut() {
         if (visibility == GONE) return
 
-        startAnimation(AlphaAnimation(1.0f, 0.0f).apply { duration = 200 })
         visibility = GONE
     }
 }
