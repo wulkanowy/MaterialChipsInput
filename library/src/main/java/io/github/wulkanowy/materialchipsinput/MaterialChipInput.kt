@@ -142,8 +142,9 @@ class MaterialChipInput : LinearLayout {
             minWidth = context.dpToPx(10f).toInt()
             hint = this@MaterialChipInput.hint
             imeOptions = IME_FLAG_NO_EXTRACT_UI
+            setRawInputType(TYPE_CLASS_TEXT)
             privateImeOptions = "nm"
-            inputType = TYPE_TEXT_VARIATION_FILTER or TYPE_TEXT_FLAG_NO_SUGGESTIONS or TYPE_CLASS_TEXT or TYPE_TEXT_FLAG_MULTI_LINE
+            inputType = TYPE_TEXT_VARIATION_FILTER or TYPE_TEXT_FLAG_NO_SUGGESTIONS or TYPE_TEXT_FLAG_MULTI_LINE
             setPadding(0)
             setBackgroundResource(android.R.color.transparent)
             doOnTextChanged { text, _, _, _ -> processChangedText(text) }

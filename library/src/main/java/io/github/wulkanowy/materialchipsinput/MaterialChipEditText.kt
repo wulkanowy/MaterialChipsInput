@@ -3,9 +3,7 @@ package io.github.wulkanowy.materialchipsinput
 import android.content.Context
 import android.util.AttributeSet
 import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.EditorInfo.IME_ACTION_DONE
 import android.view.inputmethod.EditorInfo.IME_FLAG_NO_ENTER_ACTION
-import android.view.inputmethod.EditorInfo.IME_MASK_ACTION
 import android.view.inputmethod.InputConnection
 import androidx.appcompat.widget.AppCompatEditText
 
@@ -21,12 +19,6 @@ class MaterialChipEditText : AppCompatEditText {
         val connection = super.onCreateInputConnection(outAttrs)
 
         with(outAttrs) {
-            val currentAction = imeOptions and IME_MASK_ACTION
-            if (currentAction and IME_ACTION_DONE != 0) {
-                imeOptions = imeOptions xor currentAction
-                imeOptions = imeOptions or IME_ACTION_DONE
-            }
-
             if (imeOptions and IME_FLAG_NO_ENTER_ACTION != 0) {
                 imeOptions = imeOptions and IME_FLAG_NO_ENTER_ACTION.inv()
             }
