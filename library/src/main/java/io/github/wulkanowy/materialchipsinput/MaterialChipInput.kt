@@ -158,7 +158,7 @@ class MaterialChipInput : LinearLayout {
     }
 
     override fun dispatchKeyEventPreIme(event: KeyEvent): Boolean {
-        return if (event.keyCode == KEYCODE_BACK && visibility == VISIBLE) {
+        return if (event.keyCode == KEYCODE_BACK && visibility == VISIBLE && isDropdownListVisible) {
             dropdownListView.fadeOut()
             true
         } else super.dispatchKeyEventPreIme(event)
