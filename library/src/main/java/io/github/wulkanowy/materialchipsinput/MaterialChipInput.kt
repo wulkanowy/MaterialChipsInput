@@ -26,7 +26,7 @@ import io.github.wulkanowy.materialchipsinput.util.dpToPx
 
 class MaterialChipInput : LinearLayout {
 
-    private val _insertedChipList = mutableListOf<MaterialChipItem>()
+    private val _addedChipItems = mutableListOf<ChipItem>()
 
     private val dropdownListViewAdapter = DropdownListViewAdapter(context)
 
@@ -36,23 +36,23 @@ class MaterialChipInput : LinearLayout {
 
     private val chipGroup = ChipGroup(context)
 
-    var hint: String? = null
-
-    var itemList: List<MaterialChipItem> = emptyList()
+    var filterableChipItems: List<ChipItem> = emptyList()
         set(list) {
             field = list
             dropdownListViewAdapter.updateDataSet(list)
         }
 
-    val insertedChipList: List<MaterialChipItem> get() = _insertedChipList
+    val addedChipItems: List<ChipItem> get() = _addedChipItems
 
-    var onChipAddListener: (chip: MaterialChipItem) -> Unit = {}
+    var onChipAddListener: (chip: ChipItem) -> Unit = {}
 
-    var onChipRemoveListener: (chip: MaterialChipItem) -> Unit = {}
+    var onChipRemoveListener: (chip: ChipItem) -> Unit = {}
 
     var onTextChangeListener: (text: String) -> Unit = {}
 
     val isDropdownListVisible get() = dropdownListView.visibility == VISIBLE
+
+    var hint: String? = null
 
     constructor(context: Context) : super(context)
 
@@ -72,6 +72,10 @@ class MaterialChipInput : LinearLayout {
             val listContainer = this.parent.parent as? FrameLayout ?: throw IllegalArgumentException("MaterialChipsInput must be a child of FrameLayout")
             listContainer.addView(dropdownListView, FrameLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
         }
+    }
+
+    fun addChips(chipItems: List<ChipItem>) {
+        chipItems.forEach { addChipOnLastPosition(it) }
     }
 
     fun hideDropdownList() {
@@ -96,10 +100,10 @@ class MaterialChipInput : LinearLayout {
         }
     }
 
-    private fun addChipOnLastPosition(chipItem: MaterialChipItem) {
-        _insertedChipList.add(chipItem)
+    private fun addChipOnLastPosition(chipItem: ChipItem) {
+        _addedChipItems.add(chipItem)
         chipGroup.addView(Chip(context).apply { text = chipItem.title }, chipGroup.childCount - 1)
-        dropdownListViewAdapter.removeItemFromSet(chipItem)
+        dropdownListViewAdapter.removeItemFromList(chipItem)
         onChipAddListener(chipItem)
 
         with(chipEditText) {
@@ -109,14 +113,14 @@ class MaterialChipInput : LinearLayout {
     }
 
     private fun removeChipOnLastPosition() {
-        val chipItem = _insertedChipList.elementAt(_insertedChipList.size - 1)
+        val chipItem = _addedChipItems.elementAt(_addedChipItems.size - 1)
 
-        _insertedChipList.remove(chipItem)
+        _addedChipItems.remove(chipItem)
         chipGroup.removeViewAt(chipGroup.childCount - 2)
-        dropdownListViewAdapter.addItemToSet(chipItem)
+        dropdownListViewAdapter.addItemToList(chipItem)
         onChipRemoveListener(chipItem)
 
-        if (_insertedChipList.isEmpty()) chipEditText.hint = hint
+        if (_addedChipItems.isEmpty()) chipEditText.hint = hint
     }
 
     private fun initChipGroup() {
@@ -149,7 +153,7 @@ class MaterialChipInput : LinearLayout {
             doOnTextChanged { text, _, _, _ -> processChangedText(text) }
 
             setOnKeyListener { _, keyCode, event ->
-                if (event.action == ACTION_DOWN && keyCode == KEYCODE_DEL && _insertedChipList.isNotEmpty() && text?.toString().isNullOrBlank()) {
+                if (event.action == ACTION_DOWN && keyCode == KEYCODE_DEL && _addedChipItems.isNotEmpty() && text?.toString().isNullOrBlank()) {
                     removeChipOnLastPosition()
                     true
                 } else false

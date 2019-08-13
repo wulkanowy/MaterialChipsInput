@@ -2,7 +2,7 @@ package io.github.wulkanowy.materialchipsinput.sample
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import io.github.wulkanowy.materialchipsinput.MaterialChipItem
+import io.github.wulkanowy.materialchipsinput.ChipItem
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.random.Random
 
@@ -19,10 +19,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         with(mainChipsInput) {
-            itemList = randomNumbers
+            filterableChipItems = randomNumbers
             onTextChangeListener = { scrollContainer.scrollTo(0, scrollContainer.bottom) }
         }
     }
-
-    data class ChipItem(override val title: String, override val summary: String) : MaterialChipItem
 }

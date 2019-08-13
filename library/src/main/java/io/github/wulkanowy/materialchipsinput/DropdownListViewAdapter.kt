@@ -13,13 +13,13 @@ import kotlinx.android.synthetic.main.item_dropdown_list.*
 internal class DropdownListViewAdapter(private val context: Context) :
     RecyclerView.Adapter<DropdownListViewAdapter.ItemViewHolder>() {
 
-    var onItemsSelectedListener: (item: MaterialChipItem) -> Unit = {}
+    var onItemsSelectedListener: (item: ChipItem) -> Unit = {}
 
-    private val originalItemList = mutableListOf<MaterialChipItem>()
+    private val originalItemList = mutableListOf<ChipItem>()
 
-    private val currentItemList = mutableListOf<MaterialChipItem>()
+    private val currentItemList = mutableListOf<ChipItem>()
 
-    private val filteredItemList = mutableListOf<MaterialChipItem>()
+    private val filteredItemList = mutableListOf<ChipItem>()
 
     private var chipFilter = ItemFilter(this)
 
@@ -40,7 +40,7 @@ internal class DropdownListViewAdapter(private val context: Context) :
         }
     }
 
-    fun updateDataSet(items: List<MaterialChipItem>) {
+    fun updateDataSet(items: List<ChipItem>) {
         with(originalItemList) {
             clear()
             addAll(items)
@@ -56,11 +56,11 @@ internal class DropdownListViewAdapter(private val context: Context) :
         chipFilter.filter(text, onComplete)
     }
 
-    fun removeItemFromSet(chipItem: MaterialChipItem) {
+    fun removeItemFromList(chipItem: ChipItem) {
         currentItemList.remove(chipItem)
     }
 
-    fun addItemToSet(chipItem: MaterialChipItem) {
+    fun addItemToList(chipItem: ChipItem) {
         currentItemList.add(chipItem)
     }
 
@@ -73,7 +73,7 @@ internal class DropdownListViewAdapter(private val context: Context) :
 
         override fun performFiltering(constraint: CharSequence): FilterResults {
             val originalList = adapter.currentItemList
-            val filteredList = mutableListOf<MaterialChipItem>()
+            val filteredList = mutableListOf<ChipItem>()
 
             if (constraint.isBlank()) {
                 filteredList.addAll(originalList)
@@ -96,7 +96,7 @@ internal class DropdownListViewAdapter(private val context: Context) :
         override fun publishResults(constraint: CharSequence, results: FilterResults) {
             with(adapter) {
                 filteredItemList.clear()
-                filteredItemList.addAll(results.values as List<MaterialChipItem>)
+                filteredItemList.addAll(results.values as List<ChipItem>)
                 notifyDataSetChanged()
             }
         }
