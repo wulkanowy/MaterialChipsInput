@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import io.github.wulkanowy.materialchipsinput.util.dpToPx
+import io.github.wulkanowy.materialchipsinput.util.getThemeAttrColor
 
 class MaterialChipInput : LinearLayout {
 
@@ -132,6 +133,7 @@ class MaterialChipInput : LinearLayout {
 
     private fun initDropdownListView() {
         with(dropdownListView) {
+            setBackgroundColor(context.getThemeAttrColor(R.attr.colorSurface))
             layoutManager = LinearLayoutManager(context)
             adapter = dropdownListViewAdapter
             visibility = GONE
