@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         val randomNumbers = mutableListOf<ChipItem>()
 
         repeat(30) {
-            randomNumbers.add(ChipItem(Random.nextInt().toString(), Random.nextInt().toString()))
+            randomNumbers.add(SampleChipItem(Random.nextInt().toString(), Random.nextInt().toString()))
         }
 
         with(mainChipsInput) {
@@ -23,4 +23,6 @@ class MainActivity : AppCompatActivity() {
             onTextChangeListener = { scrollContainer.scrollTo(0, scrollContainer.bottom) }
         }
     }
+
+    data class SampleChipItem(override val title: String, override val summary: String) : ChipItem
 }
