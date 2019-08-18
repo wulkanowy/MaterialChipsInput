@@ -1,6 +1,6 @@
 # MaterialChipsInput
 
-Fork of an unsupported library which makes working with chips easier
+Fork of an unsupported library which makes working with chips easier. Library adapted only for the Wulkanowy application
 
 ## Getting Started
 
