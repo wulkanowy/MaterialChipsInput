@@ -11,7 +11,7 @@ import android.view.KeyEvent
 import android.view.KeyEvent.ACTION_DOWN
 import android.view.KeyEvent.KEYCODE_BACK
 import android.view.KeyEvent.KEYCODE_DEL
-import android.view.MotionEvent
+import android.view.TouchDelegate
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.inputmethod.EditorInfo.IME_FLAG_NO_EXTRACT_UI
@@ -72,6 +72,9 @@ class MaterialChipInput : LinearLayout {
         post {
             val listContainer = this.parent.parent as? FrameLayout ?: throw IllegalArgumentException("MaterialChipsInput must be a child of FrameLayout")
             listContainer.addView(dropdownListView, FrameLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
+
+            val hitRect = Rect().apply { getLocalVisibleRect(this) }
+            touchDelegate = TouchDelegate(hitRect, chipEditText)
         }
     }
 
@@ -170,21 +173,21 @@ class MaterialChipInput : LinearLayout {
         } else super.dispatchKeyEventPreIme(event)
     }
 
-    override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
-        var isHandled = false
-        val editVisibleRect = Rect()
-        chipEditText.getGlobalVisibleRect(editVisibleRect)
+    /* override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
+         var isHandled = false
+         val editVisibleRect = Rect()
+         chipEditText.getGlobalVisibleRect(editVisibleRect)
 
-        val chipGroupVisibleRect = Rect()
-        chipGroup.getGlobalVisibleRect(chipGroupVisibleRect)
+         val chipGroupVisibleRect = Rect()
+         chipGroup.getGlobalVisibleRect(chipGroupVisibleRect)
 
-        val extendedHitRect = Rect(editVisibleRect.right, editVisibleRect.top, chipGroupVisibleRect.right, editVisibleRect.bottom)
+         val extendedHitRect = Rect(editVisibleRect.right, editVisibleRect.top, chipGroupVisibleRect.right, editVisibleRect.bottom)
 
-        event?.let {
-            if (extendedHitRect.contains(it.rawX.toInt(), it.rawY.toInt())) {
-                isHandled = chipEditText.dispatchTouchEvent(it)
-            }
-        }
-        return if (isHandled) true else super.dispatchTouchEvent(event)
-    }
+         event?.let {
+             if (extendedHitRect.contains(it.rawX.toInt(), it.rawY.toInt())) {
+                 isHandled = chipEditText.dispatchTouchEvent(it)
+             }
+         }
+         return if (isHandled) true else super.dispatchTouchEvent(event)
+     }*/
 }
