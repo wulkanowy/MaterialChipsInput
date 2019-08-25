@@ -35,6 +35,8 @@ class CustomTouchDelegate(private val bounds: Rect, private val delegateView: Vi
             }
         }
 
+        event.setLocation(delegateView.width - 1f, delegateView.height / 2f)
+
         return if (sendToDelegate) delegateView.dispatchTouchEvent(event) else false
     }
 }
