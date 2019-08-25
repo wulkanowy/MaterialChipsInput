@@ -1,28 +1,33 @@
 package io.github.wulkanowy.materialchipsinput
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Rect
-import android.text.Editable
 import android.text.InputType.TYPE_CLASS_TEXT
 import android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE
 import android.text.InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
 import android.text.InputType.TYPE_TEXT_VARIATION_FILTER
-import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.KeyEvent
-import android.view.KeyEvent.ACTION_DOWN
 import android.view.KeyEvent.KEYCODE_BACK
 import android.view.KeyEvent.KEYCODE_DEL
+import android.view.MotionEvent
+import android.view.MotionEvent.ACTION_CANCEL
+import android.view.MotionEvent.ACTION_DOWN
+import android.view.MotionEvent.ACTION_MOVE
+import android.view.MotionEvent.ACTION_POINTER_DOWN
+import android.view.MotionEvent.ACTION_POINTER_UP
+import android.view.MotionEvent.ACTION_UP
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.inputmethod.EditorInfo.IME_FLAG_NO_EXTRACT_UI
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.core.view.setPadding
+import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
-import io.github.wulkanowy.materialchipsinput.util.CustomTouchDelegate
 import io.github.wulkanowy.materialchipsinput.util.dpToPx
 import io.github.wulkanowy.materialchipsinput.util.getThemeAttrColor
 
@@ -37,6 +42,8 @@ class MaterialChipInput : LinearLayout {
     private val chipEditText = MaterialChipEditText(context)
 
     private val chipGroup = ChipGroup(context)
+
+    private var chipEditTextTargeted = false
 
     var filterableChipItems: List<ChipItem> = emptyList()
         set(list) {
@@ -73,9 +80,6 @@ class MaterialChipInput : LinearLayout {
         post {
             val listContainer = this.parent.parent as? FrameLayout ?: throw IllegalArgumentException("MaterialChipsInput must be a child of FrameLayout")
             listContainer.addView(dropdownListView, FrameLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
-
-            val hitRect = Rect().apply { getLocalVisibleRect(this) }
-            touchDelegate = CustomTouchDelegate(hitRect, chipEditText)
         }
     }
 
@@ -156,17 +160,7 @@ class MaterialChipInput : LinearLayout {
             inputType = TYPE_TEXT_VARIATION_FILTER or TYPE_TEXT_FLAG_NO_SUGGESTIONS or TYPE_TEXT_FLAG_MULTI_LINE or TYPE_CLASS_TEXT
             setPadding(0)
             setBackgroundResource(android.R.color.transparent)
-            addTextChangedListener(object : TextWatcher {
-                override fun afterTextChanged(s: Editable?) {
-                }
-
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    processChangedText(text)
-                }
-            })
+            doOnTextChanged { text, _, _, _ -> processChangedText(text) }
 
             setOnKeyListener { _, keyCode, event ->
                 if (event.action == ACTION_DOWN && keyCode == KEYCODE_DEL && _addedChipItems.isNotEmpty() && text?.toString().isNullOrBlank()) {
@@ -184,21 +178,27 @@ class MaterialChipInput : LinearLayout {
         } else super.dispatchKeyEventPreIme(event)
     }
 
-    /* override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
-         var isHandled = false
-         val editVisibleRect = Rect()
-         chipEditText.getGlobalVisibleRect(editVisibleRect)
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        val chipEditTextBounds = Rect().apply { this@MaterialChipInput.getLocalVisibleRect(this) }
+        var sendToChipEditText = false
 
-         val chipGroupVisibleRect = Rect()
-         chipGroup.getGlobalVisibleRect(chipGroupVisibleRect)
+        when (event.actionMasked) {
+            ACTION_DOWN -> {
+                chipEditTextTargeted = chipEditTextBounds.contains(event.x.toInt(), event.y.toInt())
+                sendToChipEditText = chipEditTextTargeted
+            }
+            ACTION_POINTER_DOWN, ACTION_POINTER_UP, ACTION_UP, ACTION_MOVE -> {
+                sendToChipEditText = chipEditTextTargeted
+            }
+            ACTION_CANCEL -> {
+                sendToChipEditText = chipEditTextTargeted
+                chipEditTextTargeted = false
+            }
+        }
 
-         val extendedHitRect = Rect(editVisibleRect.right, editVisibleRect.top, chipGroupVisibleRect.right, editVisibleRect.bottom)
+        event.setLocation(chipEditText.width - 1f, chipEditText.height / 2f)
 
-         event?.let {
-             if (extendedHitRect.contains(it.rawX.toInt(), it.rawY.toInt())) {
-                 isHandled = chipEditText.dispatchTouchEvent(it)
-             }
-         }
-         return if (isHandled) true else super.dispatchTouchEvent(event)
-     }*/
+        return if (sendToChipEditText) chipEditText.dispatchTouchEvent(event) else super.onTouchEvent(event)
+    }
 }
