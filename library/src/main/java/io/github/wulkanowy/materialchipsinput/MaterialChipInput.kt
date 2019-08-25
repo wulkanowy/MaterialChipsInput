@@ -2,10 +2,12 @@ package io.github.wulkanowy.materialchipsinput
 
 import android.content.Context
 import android.graphics.Rect
+import android.text.Editable
 import android.text.InputType.TYPE_CLASS_TEXT
 import android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE
 import android.text.InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
 import android.text.InputType.TYPE_TEXT_VARIATION_FILTER
+import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.KeyEvent.ACTION_DOWN
@@ -18,7 +20,6 @@ import android.view.inputmethod.EditorInfo.IME_FLAG_NO_EXTRACT_UI
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.core.view.setPadding
-import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
@@ -155,7 +156,17 @@ class MaterialChipInput : LinearLayout {
             inputType = TYPE_TEXT_VARIATION_FILTER or TYPE_TEXT_FLAG_NO_SUGGESTIONS or TYPE_TEXT_FLAG_MULTI_LINE or TYPE_CLASS_TEXT
             setPadding(0)
             setBackgroundResource(android.R.color.transparent)
-            doOnTextChanged { text, _, _, _ -> processChangedText(text) }
+            addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(s: Editable?) {
+                }
+
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    processChangedText(text)
+                }
+            })
 
             setOnKeyListener { _, keyCode, event ->
                 if (event.action == ACTION_DOWN && keyCode == KEYCODE_DEL && _addedChipItems.isNotEmpty() && text?.toString().isNullOrBlank()) {
