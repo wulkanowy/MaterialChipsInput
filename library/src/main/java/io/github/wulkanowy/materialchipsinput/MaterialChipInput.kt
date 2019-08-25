@@ -13,7 +13,6 @@ import android.view.KeyEvent
 import android.view.KeyEvent.ACTION_DOWN
 import android.view.KeyEvent.KEYCODE_BACK
 import android.view.KeyEvent.KEYCODE_DEL
-import android.view.TouchDelegate
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.inputmethod.EditorInfo.IME_FLAG_NO_EXTRACT_UI
@@ -23,6 +22,7 @@ import androidx.core.view.setPadding
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import io.github.wulkanowy.materialchipsinput.util.CustomTouchDelegate
 import io.github.wulkanowy.materialchipsinput.util.dpToPx
 import io.github.wulkanowy.materialchipsinput.util.getThemeAttrColor
 
@@ -75,7 +75,7 @@ class MaterialChipInput : LinearLayout {
             listContainer.addView(dropdownListView, FrameLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT))
 
             val hitRect = Rect().apply { getLocalVisibleRect(this) }
-            touchDelegate = TouchDelegate(hitRect, chipEditText)
+            touchDelegate = CustomTouchDelegate(hitRect, chipEditText)
         }
     }
 
