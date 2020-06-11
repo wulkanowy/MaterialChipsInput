@@ -1,5 +1,6 @@
 package io.github.wulkanowy.materialchipsinput.util
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color.WHITE
@@ -32,6 +33,7 @@ private val materialColors = listOf(
     0xff90a4ae
 )
 
+@SuppressLint("DefaultLocale")
 fun createLetterBitmap(context: Context, text: String): Bitmap {
     val firstChar = (text.firstOrNull { it.isLetterOrDigit() } ?: "?").toString().toUpperCase()
     val bounds = Rect()
