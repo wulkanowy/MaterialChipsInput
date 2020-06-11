@@ -1,5 +1,6 @@
 package io.github.wulkanowy.materialchipsinput
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -71,6 +72,7 @@ internal class DropdownListViewAdapter(private val context: Context) :
 
     class ItemFilter(private val adapter: DropdownListViewAdapter) : Filter() {
 
+        @SuppressLint("DefaultLocale")
         override fun performFiltering(constraint: CharSequence): FilterResults {
             val originalList = adapter.currentItemList
             val filteredList = mutableListOf<ChipItem>()
