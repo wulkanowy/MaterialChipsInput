@@ -111,7 +111,11 @@ class MaterialChipInput : LinearLayout {
 
     private fun addChipOnLastPosition(chipItem: ChipItem) {
         _addedChipItems.add(chipItem)
-        chipGroup.addView(Chip(context).apply { text = chipItem.title }, chipGroup.childCount - 1)
+        chipGroup.addView(Chip(context).apply {
+            text = chipItem.title
+            setEnsureMinTouchTargetSize(false)
+        }, chipGroup.childCount - 1)
+
         dropdownListViewAdapter.removeItemFromList(chipItem)
         onChipAddListener(chipItem)
 
@@ -163,7 +167,8 @@ class MaterialChipInput : LinearLayout {
             doOnTextChanged { text, _, _, _ -> processChangedText(text) }
 
             setOnKeyListener { _, keyCode, event ->
-                if (event.action == ACTION_DOWN && keyCode == KEYCODE_DEL && _addedChipItems.isNotEmpty() && text?.toString().isNullOrBlank()) {
+                if (event.action == ACTION_DOWN && keyCode == KEYCODE_DEL && _addedChipItems.isNotEmpty() && text?.toString()
+                        .isNullOrBlank()) {
                     removeChipOnLastPosition()
                     true
                 } else false
