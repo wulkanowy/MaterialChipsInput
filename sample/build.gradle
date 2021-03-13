@@ -9,8 +9,8 @@ android {
         applicationId "io.github.wulkanowy.materialchipsinput.sample"
         minSdkVersion 15
         targetSdkVersion 30
-        versionCode 12
-        versionName "2.1.0"
+        versionCode 13
+        versionName "2.2.0"
     }
 
     buildTypes {
