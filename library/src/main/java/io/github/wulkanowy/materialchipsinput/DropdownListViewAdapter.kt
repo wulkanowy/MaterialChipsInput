@@ -107,7 +107,7 @@ internal class DropdownListViewAdapter(private val context: Context) :
         override fun publishResults(constraint: CharSequence, results: FilterResults) {
             with(adapter) {
                 filteredItemList.clear()
-                filteredItemList.addAll(results.values as List<ChipItem>)
+                filteredItemList.addAll((results.values as List<ChipItem>?).orEmpty())
                 notifyDataSetChanged()
             }
         }
