@@ -1,6 +1,5 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 30
@@ -22,8 +21,8 @@ android {
         jvmTarget = "1.8"
     }
 
-    androidExtensions {
-        experimental = true
+    buildFeatures {
+        viewBinding true
     }
 }
 

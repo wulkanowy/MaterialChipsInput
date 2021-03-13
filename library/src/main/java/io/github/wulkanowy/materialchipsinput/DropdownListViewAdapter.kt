@@ -3,15 +3,12 @@ package io.github.wulkanowy.materialchipsinput
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import androidx.recyclerview.widget.RecyclerView
+import io.github.wulkanowy.materialchipsinput.databinding.ItemDropdownListBinding
 import io.github.wulkanowy.materialchipsinput.util.createLetterBitmap
-import kotlinx.android.extensions.LayoutContainer
-import kotlinx.android.synthetic.main.item_dropdown_list.*
 import me.xdrop.fuzzywuzzy.FuzzySearch
-import java.util.Locale
 
 internal class DropdownListViewAdapter(private val context: Context) :
     RecyclerView.Adapter<DropdownListViewAdapter.ItemViewHolder>() {
@@ -28,19 +25,18 @@ internal class DropdownListViewAdapter(private val context: Context) :
 
     override fun getItemCount() = filteredItemList.size
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        return ItemViewHolder(LayoutInflater.from(context)
-            .inflate(R.layout.item_dropdown_list, parent, false))
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ItemViewHolder(
+        ItemDropdownListBinding.inflate(LayoutInflater.from(parent.context), parent, false))
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        with(holder) {
-            filteredItemList.getOrNull(position)?.let { materialChipItem ->
-                itemDropdownAvatar.setImageBitmap(createLetterBitmap(context, materialChipItem.title))
-                itemDropdownTitle.text = materialChipItem.title
-                itemDropdownSummary.text = materialChipItem.summary
-                itemView.setOnClickListener { onItemsSelectedListener(materialChipItem) }
-            }
+        val item = filteredItemList.getOrNull(position) ?: return
+
+        with(holder.binding) {
+            itemDropdownAvatar.setImageBitmap(createLetterBitmap(context, item.title))
+            itemDropdownTitle.text = item.title
+            itemDropdownSummary.text = item.summary
+
+            root.setOnClickListener { onItemsSelectedListener(item) }
         }
     }
 
@@ -68,10 +64,8 @@ internal class DropdownListViewAdapter(private val context: Context) :
         currentItemList.add(chipItem)
     }
 
-    class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view), LayoutContainer {
-
-        override val containerView get() = itemView
-    }
+    class ItemViewHolder(val binding: ItemDropdownListBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     class ItemFilter(private val adapter: DropdownListViewAdapter) :
         Filter() {
@@ -87,9 +81,10 @@ internal class DropdownListViewAdapter(private val context: Context) :
                 filteredList.addAll(originalList
                     .map {
                         val ratio = FuzzySearch.tokenSortPartialRatio(
-                            constraint.toString().toLowerCase(Locale.getDefault()).trim(),
-                            it.title.toLowerCase(Locale.getDefault())
+                            constraint.toString().toLowerCase().trim(),
+                            it.title.toLowerCase()
                         )
+
                         Pair(it, ratio)
                     }
                     .sortedByDescending { (_, ratio) -> ratio }
